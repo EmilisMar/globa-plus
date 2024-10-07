@@ -1,1 +1,1 @@
-# globa-plus
+# Globa Plius
