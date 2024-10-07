@@ -1,0 +1,40 @@
+@layer {
+	@tailwind base;
+}
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	--Bg: #ffffff;
+	--Primary: #38b6ff;
+	--PrimaryDark: #111828;
+	--PrimaryDarkHover: #283852;
+	--PrimaryLight: #74d8f130;
+	--Buttons: #38b6ff;
+	--Error: #de3939;
+	--GreyLight: #f1f3f5;
+	--Text: #111827;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+:focus,
+:focus-within {
+	border-color: var(--Primary);
+}
+
+body {
+	color: var(--Primary);
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+h1 {
+	font-size: 2rem;
+	font-weight: bold;
+	margin: 0;
+}

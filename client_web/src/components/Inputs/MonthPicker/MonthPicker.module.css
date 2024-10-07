@@ -1,0 +1,14 @@
+/* .mantine-MonthPicker-monthsListRow {
+	[data-selected],
+	[data-selected]:hover {
+		background-color: var(--Primary);
+		color: blue;
+	}
+} */
+
+.monthsListRow {
+	[data-selected],
+	[data-selected]:hover {
+		background-color: var(--Primary);
+	}
+}

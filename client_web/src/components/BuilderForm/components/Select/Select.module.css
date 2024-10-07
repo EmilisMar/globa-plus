@@ -1,0 +1,7 @@
+.select {
+	border-color: transparent;
+
+	&:focus {
+		border-color: var(--Primary);
+	}
+}

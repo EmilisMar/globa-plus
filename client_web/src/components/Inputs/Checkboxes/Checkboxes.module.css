@@ -1,0 +1,17 @@
+.root :hover {
+	cursor: pointer;
+}
+
+.root input[type='checkbox'] {
+	background-color: transparent;
+	border-color: var(--Text);
+	border-width: 1.5px;
+}
+
+.root input[type='checkbox']:checked {
+	border-color: var(--Primary);
+}
+
+.root svg path {
+	fill: var(--Primary);
+}

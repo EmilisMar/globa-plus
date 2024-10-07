@@ -1,0 +1,63 @@
+{
+	"name": "client_web-admin",
+	"author": {
+		"name": "Marius Mariakinas",
+		"email": "info@marius.dev",
+		"url": "https://marius.dev"
+	},
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"start": "vite preview --port ${PORT} --host 0.0.0.0",
+		"check": "npx react-compiler-healthcheck"
+	},
+	"dependencies": {
+		"@emotion/css": "^11.13.4",
+		"@emotion/react": "^11.13.3",
+		"@emotion/styled": "^11.13.0",
+		"@fullcalendar/core": "^6.1.15",
+		"@fullcalendar/daygrid": "^6.1.15",
+		"@fullcalendar/interaction": "^6.1.15",
+		"@fullcalendar/react": "^6.1.15",
+		"@fullcalendar/timegrid": "^6.1.15",
+		"@mantine/core": "^7.13.2",
+		"@mantine/dates": "^7.13.2",
+		"@mantine/form": "^7.13.2",
+		"@mantine/hooks": "^7.13.2",
+		"@mantine/modals": "^7.13.2",
+		"@mantine/notifications": "^7.13.2",
+		"@mariuzm/form": "1.0.2",
+		"@mariuzm/utils": "^1.5.8",
+		"@tabler/icons-react": "^3.19.0",
+		"axios": "^1.7.7",
+		"babel-plugin-react-compiler": "latest",
+		"dayjs": "^1.11.13",
+		"i18next": "^23.15.1",
+		"i18next-browser-languagedetector": "^8.0.0",
+		"react": "next",
+		"react-big-calendar": "^1.15.0",
+		"react-dom": "next",
+		"react-i18next": "^15.0.2",
+		"react-router-dom": "^6.26.2",
+		"react-signature-pad-wrapper": "^4.0.4",
+		"react-toastify": "^10.0.5",
+		"tailwind-merge": "^2.5.3",
+		"zustand": "^4.5.5"
+	},
+	"devDependencies": {
+		"@types/node": "^22.7.4",
+		"@types/react": "^18.3.11",
+		"@types/react-dom": "^18.3.0",
+		"@typescript-eslint/eslint-plugin": "^7.18.0",
+		"@typescript-eslint/parser": "^7.18.0",
+		"@vitejs/plugin-react": "^4.3.2",
+		"autoprefixer": "^10.4.20",
+		"postcss": "^8.4.47",
+		"postcss-preset-mantine": "^1.17.0",
+		"postcss-simple-vars": "^7.0.1",
+		"tailwindcss": "^3.4.13",
+		"typescript": "^5.6.2",
+		"vite": "^5.4.8"
+	}
+}
