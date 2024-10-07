@@ -2,7 +2,7 @@ import { Table as MTable } from '@mantine/core'
 import type { DateValue } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import { formatCamelToSnake, getMonthUTC, textFormat } from '@mariuzm/utils'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { API_GET_Detail, API_GET_Table } from '../../apis/entities/_main.api'
@@ -14,6 +14,9 @@ import { MonthPickerPopover } from '../Inputs/MonthPicker/MonthPicker'
 import { ModalAddEntity } from '../Modals/ModalAddEntity'
 
 import { COL_NAMES_OBJ } from './schemas/table.schema'
+import PeriodFilterSelect from '../PeriodFilterSelect'
+import { PeriodOption } from '../../enums/periods.enums'
+import { getDateRangeByPeriod } from '../helpers/dateRange'
 
 export const Table = ({
 	tableName,
@@ -24,6 +27,7 @@ export const Table = ({
 	items,
 	isDateFilter,
 	isEditable,
+	isSelectPeriod,
 }: {
 	tableName?: TableNamesT
 	modalTitle?: string
@@ -33,21 +37,47 @@ export const Table = ({
 	items?: any[]
 	isDateFilter?: boolean
 	isEditable?: boolean
+	isSelectPeriod?: boolean
 }) => {
 	const [isLoading, setIsLoading] = useState(true)
 	const [cols, setCols] = useState<string[]>([])
 	const [rows, setRows] = useState<any[]>([])
 	const [dateFilter, setDateFilter] = useState<DateValue | null>(isDetail ? new Date() : null)
+	const [selectedPeriod, setSelectedPeriod] = useState(PeriodOption.Today);
 	const [modal, setModal] = useDisclosure(false)
 	const [editPid, setEditPid] = useState<Record<string, any> | null>(null)
 	const hideCols = ['pid', 'workerPid'] as string[]
 	const nav = useNavigate()
 	const t = useT()
 
+	const onChangePeriod = useCallback((period: PeriodOption) => {
+		if (isSelectPeriod) {
+			setSelectedPeriod(period);
+		}
+	}, []);
+
+
 	useEffect(() => {
 		const main = async () => {
-			const data =
-				items || (tableName && (await API_GET_Table(tableName, getMonthUTC(dateFilter as Date))))
+			let data;
+
+			if (isSelectPeriod && tableName === "visits") {
+				// Calculate dateFrom and dateTo based on selectedPeriod
+				const { dateFrom, dateTo } = getDateRangeByPeriod(selectedPeriod);
+				data = (
+					await API_GET_Table(
+						tableName,
+						dateFrom ? dateFrom.toISOString() : undefined,
+						dateTo ? dateTo.toISOString() : undefined
+					)
+				);
+			} else {
+				data = items || (
+					tableName &&
+					await API_GET_Table(tableName, getMonthUTC(dateFilter as Date))
+				);
+			}
+
 			if (data && data.length > 0) {
 				setCols(Object.keys(data[0]))
 				setRows(data)
@@ -55,7 +85,7 @@ export const Table = ({
 			setIsLoading(false)
 		}
 		main()
-	}, [dateFilter, items, tableName])
+	}, [dateFilter, items, tableName, isSelectPeriod, selectedPeriod]);
 
 	return (
 		<div>
@@ -67,6 +97,7 @@ export const Table = ({
 				)}
 				<div style={{ display: 'flex', gap: 8 }}>
 					{isDateFilter && <MonthPickerPopover value={dateFilter} setValue={setDateFilter} />}
+					{isSelectPeriod && <PeriodFilterSelect onChange={onChangePeriod} value={selectedPeriod} />}
 					{modalTitle && Form && (
 						<Button
 							title={modalTitle}

@@ -18,6 +18,7 @@ export const VisitsPage = () => {
 	return (
 		<div>
 			<Table
+				isSelectPeriod={isWorker}
 				tableName="visits"
 				modalTitle={t('createVisit')}
 				{...(isWorker ? null : { Form: FormVisit })}
