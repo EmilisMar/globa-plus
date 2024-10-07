@@ -4,11 +4,14 @@ import { req } from '../../providers/axios.provider'
 import { useStateUser } from '../../states/user.state'
 import type { TableNamesT } from '../types/entities.api.type'
 
-export const API_GET_Table = async (table: TableNamesT, dateFrom?: string) => {
+export const API_GET_Table = async (table: TableNamesT, dateFrom?: string, dateTo?: string) => {
 	const role = useStateUser.getState().user?.role
 	if (!role) return toastErr(UsersE.USER_ROLE_NOT_FOUND)
-	const query = dateFrom ? `?dateFrom=${dateFrom}` : ''
-	return await req.get(`/${role}/entity/${table}${query}`)
+	const query = [
+		dateFrom ? `dateFrom=${dateFrom}` : '',
+		dateTo ? `dateTo=${dateTo}` : ''
+	].filter(Boolean).join('&');
+	return await req.get(`/${role}/entity/${table}${query ? `?${query}` : ''}`)
 }
 
 export const API_GET_Detail = async (table: TableNamesT, pid: string) => {

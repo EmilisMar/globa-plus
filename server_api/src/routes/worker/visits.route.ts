@@ -17,11 +17,21 @@ import type { FastReqT } from '../../types/fastify.type'
 import { err } from '../../utils/err.util'
 import { arrToObj } from '../../utils/obj.util'
 
+const GetVisitsQuery = t.Object({
+	dateFrom: t.Optional(t.String()),
+	dateTo: t.Optional(t.String()),
+});
+
 export const wGetVisits = {
-	handler: async (req: FastifyRequest, res: FastifyReply) => {
-		return res.code(200).send(await q_w_get_visits_t(req.token.pid))
+	schema: {
+		querystring: GetVisitsQuery,
 	},
-}
+	handler: async (req: FastifyRequest<{ Querystring: typeof GetVisitsQuery }>, res: FastifyReply) => {
+		const { dateFrom, dateTo } = req.query;
+		const visits = await q_w_get_visits_t(req.token.pid, dateFrom, dateTo);
+		return res.code(200).send(visits);
+	},
+};
 
 const GetVisitS = {
 	params: t.Object({ visitPid: t.String() }, { additionalProperties: false }),

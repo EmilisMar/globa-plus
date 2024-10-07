@@ -35,28 +35,46 @@ export const q_p_get_visits_t = async (tPid: string) => {
 		.execute()
 }
 
-export const q_w_get_visits_t = async (tPid: string) => {
-	return await dbk
-		.selectFrom('visits as v')
-		.leftJoin('recipients as r', 'r.pid', 'v.recipient_pid')
-		.where('v.worker_pid', '=', tPid)
-		.where((e) => e.or([e('v.status', '!=', 'APPROVED'), e('v.status', '!=', 'CANCELLED')]))
-		.orderBy('v.time_from', 'asc')
-		.select((e) => [
-			'v.pid',
-			sql<string>`concat(${e.ref('r.first_name')}, ' ', ${e.ref('r.last_name')})`.as('recipient'),
-			sql<string>`concat(
-				${e.ref('r.address', '->>').key('adddress_line')}, ', ',
-				${e.ref('r.address', '->>').key('town')}, ', ',
-				${e.ref('r.address', '->>').key('postCode')})
-			`.as('address'),
-			'r.phone',
-			'v.time_from as timeFrom',
-			'v.time_to as timeTo',
-			'v.status',
-		])
-		.execute()
-}
+export const q_w_get_visits_t = async (tPid: string, dateFrom?: string, dateTo?: string) => {
+	let query = dbk
+	.selectFrom('visits as v')
+	.leftJoin('recipients as r', 'r.pid', 'v.recipient_pid')
+	.where('v.worker_pid', '=', tPid)
+	.where((e) => e.or([e('v.status', '!=', 'APPROVED'), e('v.status', '!=', 'CANCELLED')]))
+	.orderBy('v.time_from', 'asc')
+	.select((e) => [
+		'v.pid',
+		sql<string>`concat(${e.ref('r.first_name')}, ' ', ${e.ref('r.last_name')})`.as('recipient'),
+		sql<string>`concat(
+		  ${e.ref('r.address', '->>').key('adddress_line')}, ', ',
+		  ${e.ref('r.address', '->>').key('town')}, ', ',
+		  ${e.ref('r.address', '->>').key('postCode')})
+		`.as('address'),
+		'r.phone',
+		'v.time_from as timeFrom',
+		'v.time_to as timeTo',
+		'v.status',
+	  ]);
+  
+	  if (dateFrom) {
+		const dateFromObj = new Date(dateFrom);
+		query = query.where(
+			sql`v.time_from AT TIME ZONE 'UTC'`,
+			'>=',
+			sql`${dateFromObj.toISOString()}`
+		);
+	}
+	if (dateTo) {
+		const dateToObj = new Date(dateTo);
+		query = query.where(
+			sql`v.time_to AT TIME ZONE 'UTC'`,
+			'<=',
+			sql`${dateToObj.toISOString()}`
+		);
+	}
+  
+	return await query.execute();
+};
 
 export const q_p_get_visit = async (tPid: string, vPid: string) => {
 	const q = await dbk
