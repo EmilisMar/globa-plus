@@ -39,6 +39,13 @@
 	"visitInProgressBody": "Šiuo metu turite vizitą, kuris vyksta. Prieš pradedant naują, užbaikite ankstesnį vizitą.",
 	"visit_approved": "Vizitas patvirtintas",
 	"returnBack": "Grįžti atgal",
+	"selectTimeframe": "Pasirinkite laiko rėžį",
+	"timeframe": {
+		"today": "Šiandien",
+		"thisWeek": "Šią savaitę",
+		"thisMonth": "Šį mėnesį"
+	},
+	"showAll": "Rodyti visus",
 	"menu": {
 		"admin": "Administratorius",
 		"categories": "Kategorijos",

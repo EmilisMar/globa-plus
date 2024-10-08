@@ -19,6 +19,7 @@ export const VisitsPage = () => {
 		<div>
 			<Table
 				tableName="visits"
+				isTimeframeFilter={isWorker}
 				modalTitle={t('createVisit')}
 				{...(isWorker ? null : { Form: FormVisit })}
 				isDetail

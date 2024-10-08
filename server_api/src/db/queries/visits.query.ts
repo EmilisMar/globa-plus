@@ -35,12 +35,24 @@ export const q_p_get_visits_t = async (tPid: string) => {
 		.execute()
 }
 
-export const q_w_get_visits_t = async (tPid: string) => {
-	return await dbk
+export const q_w_get_visits_t = async (tPid: string, dateFrom?: string, dateEnd?: string) => {
+	let query = dbk
 		.selectFrom('visits as v')
 		.leftJoin('recipients as r', 'r.pid', 'v.recipient_pid')
 		.where('v.worker_pid', '=', tPid)
-		.where((e) => e.or([e('v.status', '!=', 'APPROVED'), e('v.status', '!=', 'CANCELLED')]))
+		.where((e) => 
+			e.or([e('v.status', '!=', 'APPROVED'), e('v.status', '!=', 'CANCELLED')])
+		);
+
+	if (dateFrom) {
+		query = query.where('v.time_from', '>=', new Date(dateFrom));
+	}
+
+	if (dateEnd) {
+		query = query.where('v.time_to', '<', new Date(dateEnd));
+	}
+
+	return await query
 		.orderBy('v.time_from', 'asc')
 		.select((e) => [
 			'v.pid',
@@ -55,8 +67,8 @@ export const q_w_get_visits_t = async (tPid: string) => {
 			'v.time_to as timeTo',
 			'v.status',
 		])
-		.execute()
-}
+		.execute();
+};
 
 export const q_p_get_visit = async (tPid: string, vPid: string) => {
 	const q = await dbk

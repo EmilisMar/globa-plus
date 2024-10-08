@@ -39,6 +39,13 @@
 	"visitInProgressBody": "Currently, you have a visit that is in progress. Please complete the visit before starting a new one.",
 	"visit_approved": "Visit Approved",
 	"returnBack": "Return Back",
+	"selectTimeframe": "Choose timeframe",
+	"timeframe": {
+		"today": "Today",
+		"thisWeek": "This week",
+		"thisMonth": "This month"
+	},
+	"showAll": "Show all",
 	"menu": {
 		"admin": "Admin",
 		"categories": "Categories",

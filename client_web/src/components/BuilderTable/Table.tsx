@@ -1,10 +1,10 @@
 import { Table as MTable } from '@mantine/core'
 import type { DateValue } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
-import { formatCamelToSnake, getMonthUTC, textFormat } from '@mariuzm/utils'
-import { useEffect, useState } from 'react'
+import { formatCamelToSnake, textFormat } from '@mariuzm/utils'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { endOfMonth, endOfDay, startOfMonth, startOfWeek, endOfWeek } from '../../utils/date.util'
 import { API_GET_Detail, API_GET_Table } from '../../apis/entities/_main.api'
 import type { TableNamesT } from '../../apis/types/entities.api.type'
 import { Color, Style } from '../../styles/base.style'
@@ -12,50 +12,90 @@ import { lo, useT } from '../../utils/i18n.util'
 import { Button } from '../Button'
 import { MonthPickerPopover } from '../Inputs/MonthPicker/MonthPicker'
 import { ModalAddEntity } from '../Modals/ModalAddEntity'
-
+import {TimeframeSelect } from '../Inputs/TimeframeSelect/TimeframeSelect'
 import { COL_NAMES_OBJ } from './schemas/table.schema'
+import { startOfDay } from '@fullcalendar/core/internal'
 
 export const Table = ({
 	tableName,
 	modalTitle,
 	modalTitleEdit,
 	Form,
-	isDetail = false,
 	items,
+	isDetail,
 	isDateFilter,
+	isTimeframeFilter,
 	isEditable,
 }: {
 	tableName?: TableNamesT
 	modalTitle?: string
 	modalTitleEdit?: string
 	Form?: React.FC
-	isDetail?: boolean
 	items?: any[]
 	isDateFilter?: boolean
+	isDetail?: boolean
+	isTimeframeFilter? : boolean
 	isEditable?: boolean
 }) => {
 	const [isLoading, setIsLoading] = useState(true)
 	const [cols, setCols] = useState<string[]>([])
 	const [rows, setRows] = useState<any[]>([])
-	const [dateFilter, setDateFilter] = useState<DateValue | null>(isDetail ? new Date() : null)
+	const [dateFrom, setDateFrom] = useState<DateValue>(isTimeframeFilter ? startOfDay(new Date()) : null)
+	const [dateEnd, setDateEnd] = useState<DateValue>(isTimeframeFilter ? endOfDay(new Date()) : null)
+	const [timeframe, setTimeframe] = useState<string | null>('today');
 	const [modal, setModal] = useDisclosure(false)
 	const [editPid, setEditPid] = useState<Record<string, any> | null>(null)
 	const hideCols = ['pid', 'workerPid'] as string[]
 	const nav = useNavigate()
 	const t = useT()
 
+	const handleTimeframe = useCallback((value : string | null) => {
+		switch (value) {
+			case 'today':
+				setDateFrom(startOfDay(new Date()))
+				setDateEnd(endOfDay(new Date()));
+				break;
+			case 'week':
+				setDateFrom(startOfWeek(new Date()));
+				setDateEnd(endOfWeek(new Date()));
+				break;
+			case 'month':
+				setDateFrom(startOfMonth(new Date()));
+				setDateEnd(endOfMonth(new Date()));
+				break;
+			case 'all':
+				setDateFrom(null); // or your logic for 'all' (e.g., no filtering)
+				setDateEnd(null);
+				break;
+			default:
+				// Handle any additional cases or errors
+				break;
+		}
+
+		setTimeframe(value)
+	}, [])
+
 	useEffect(() => {
 		const main = async () => {
 			const data =
-				items || (tableName && (await API_GET_Table(tableName, getMonthUTC(dateFilter as Date))))
-			if (data && data.length > 0) {
-				setCols(Object.keys(data[0]))
+				items || (tableName && (await API_GET_Table(tableName, dateFrom, dateEnd)))
+			if (data) {
 				setRows(data)
+
+				if (data.length) {
+					setCols(Object.keys(data[0]))
+				}
 			}
 			setIsLoading(false)
 		}
 		main()
-	}, [dateFilter, items, tableName])
+	}, [dateFrom, dateEnd, items, tableName])
+
+	const handleMonthDate = useCallback((date : DateValue) => {
+		setDateFrom(startOfMonth(date));
+		setDateEnd(endOfMonth(date))
+	}, [])
+
 
 	return (
 		<div>
@@ -66,7 +106,8 @@ export const Table = ({
 					</h1>
 				)}
 				<div style={{ display: 'flex', gap: 8 }}>
-					{isDateFilter && <MonthPickerPopover value={dateFilter} setValue={setDateFilter} />}
+					{isDateFilter && <MonthPickerPopover value={dateFrom} setValue={handleMonthDate} />}
+					{isTimeframeFilter && <TimeframeSelect value={timeframe} onChange={handleTimeframe} />}
 					{modalTitle && Form && (
 						<Button
 							title={modalTitle}
