@@ -17,9 +17,18 @@ import type { FastReqT } from '../../types/fastify.type'
 import { err } from '../../utils/err.util'
 import { arrToObj } from '../../utils/obj.util'
 
+const ActionListVisitsS = {
+	querystring: t.Object({ dateFrom: t.String(), dateEnd: t.String() }, { additionalProperties: false }),
+}
+
 export const wGetVisits = {
-	handler: async (req: FastifyRequest, res: FastifyReply) => {
-		return res.code(200).send(await q_w_get_visits_t(req.token.pid))
+	handler: async (req: FastReqT<typeof ActionListVisitsS>, res: FastifyReply) => {
+		const {
+			dateFrom,
+			dateEnd
+		} = req.query
+
+		return res.code(200).send(await q_w_get_visits_t(req.token.pid, dateFrom, dateEnd))
 	},
 }
 
