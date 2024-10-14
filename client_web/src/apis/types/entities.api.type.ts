@@ -28,6 +28,7 @@ export type RecipientT = {
 	phone: string
 	notes: string | null
 	hourlyRate: number
+	serviceGroups: string[]
 	approveBy: `${RecipientApprovByE}`
 	email: string | null
 	createBy: string

@@ -1,5 +1,4 @@
 import { sql, type Expression, type SqlBool } from 'kysely'
-
 import { getEndOfMonth } from '@mariuzm/utils'
 
 import { dbk } from '../../providers/kysely.provider'
@@ -51,6 +50,7 @@ export const q_p_get_recipient = async (pid: string) => {
 			'address',
 			'phone',
 			'notes',
+			'service_groups as serviceGroups',
 			'approve_by as approveBy',
 			'email',
 			'created_by as createBy',
@@ -71,6 +71,7 @@ export const q_ap_create_recipient = async (body: CreateRecipientT, tPid: string
 			phone: body.phone,
 			notes: body.notes,
 			hourly_rate: body.hourlyRate,
+			service_groups: body.serviceGroups,
 			approve_by: body.approveBy,
 			email: body.email,
 			created_by: tPid,

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-
-import { Select as MSelect } from '@mantine/core'
+import { MultiSelect as MMultiSelect, Select as MSelect } from '@mantine/core'
 import { Controller, type Form } from '@mariuzm/form'
 
 import {
@@ -174,6 +173,50 @@ export const SelectBaseAPI = ({ initVal, entity }: { initVal: string; entity: 'w
 			onChange={onChange}
 			data={data}
 			rightSection={isLoading && <Spinner />}
+		/>
+	)
+}
+
+export const MultiSelect = <T extends object>({
+	id,
+	form,
+	placeholder,
+	isDisabled,
+}: Form<T> & {
+	placeholder?: string
+	isDisabled?: boolean
+}) => {
+	const [isApiLoading, setIsApiLoading] = useState(false)
+	const [data, setData] = useState<SelectOptionT[]>([])
+	return (
+		<Controller
+			name={id}
+			control={form.control}
+			render={({ field: { onChange, value = [] }, fieldState: { error } }) => {
+				return (
+					<div>
+						<MMultiSelect
+							classNames={{ input: css.select }}
+							value={value}
+							placeholder={placeholder}
+							disabled={isDisabled}
+							data={data}
+							onChange={onChange}
+							onClick={async () => {
+								setIsApiLoading(true)
+								setData(await API_GET_OptionsV2('categories_groups'))
+								setIsApiLoading(false)
+							}}
+							rightSection={isApiLoading && <Spinner />}
+							styles={{
+								input: { color: Color.Text, backgroundColor: Color.GreyLight },
+								options: { color: Color.Text },
+							}}
+						/>
+						<FormError message={error?.message} />
+					</div>
+				)
+			}}
 		/>
 	)
 }

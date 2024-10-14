@@ -40,13 +40,6 @@ export interface CategoriesGroups {
   pid: string;
 }
 
-export interface Logs {
-  createdAt: Generated<Timestamp | null>;
-  id: Generated<number>;
-  ipAddress: string | null;
-  routePath: string | null;
-}
-
 export interface Recipients {
   address: Json | null;
   approveBy: string | null;
@@ -60,6 +53,7 @@ export interface Recipients {
   notes: string | null;
   phone: string;
   pid: string;
+  serviceGroups: Generated<string[] | null>;
 }
 
 export interface Services {
@@ -146,7 +140,6 @@ export interface VisitsLogs {
 export interface DB {
   categories: Categories;
   categoriesGroups: CategoriesGroups;
-  logs: Logs;
   recipients: Recipients;
   services: Services;
   users: Users;

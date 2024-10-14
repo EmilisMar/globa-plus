@@ -24,6 +24,7 @@ export const AddRecipientS = z
 		phone: z.string().min(1).max(50),
 		notes: z.string().optional(),
 		hourlyRate: z.number(),
+		serviceGroups: z.array(z.string().min(1)),
 		approveBy: z.enum([RecipientApprovByE.EMAIL, RecipientApprovByE.SIGNATURE]),
 		email: z.string().email().optional(),
 	})

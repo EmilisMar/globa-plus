@@ -1,12 +1,16 @@
-import { useForm, useWatch } from '@mariuzm/form'
 import { useEffect, useState } from 'react'
+import { useForm, useWatch } from '@mariuzm/form'
 
 import { API_Patch_Recipient, API_POST_Recipient } from '../../apis/entities/recipients.api.entity'
 import type { RecipientT } from '../../apis/types/entities.api.type'
 import { RecipientApprovByE } from '../../apis/types/entities.api.type'
 import { InputPrice } from '../../components/BuilderForm/components/InputPrice'
 import { InputText } from '../../components/BuilderForm/components/InputText'
-import { Select, SelectAPI } from '../../components/BuilderForm/components/Select/Select'
+import {
+	MultiSelect,
+	Select,
+	SelectAPI,
+} from '../../components/BuilderForm/components/Select/Select'
 import { AddRecipientS } from '../../components/BuilderForm/schemas/main.schema'
 import { Table } from '../../components/BuilderTable/Table'
 import { Button } from '../../components/Button'
@@ -46,6 +50,7 @@ const Form = ({ item }: { item?: RecipientT }) => {
 			f.setValue('address.country', item.address?.country || '')
 			f.setValue('phone', item.phone)
 			f.setValue('notes', item?.notes || '')
+			f.setValue('serviceGroups', item.serviceGroups)
 			f.setValue('hourlyRate', item.hourlyRate)
 			f.setValue('approveBy', item.approveBy as RecipientApprovByE)
 			item.email && f.setValue('email', item.email)
@@ -94,6 +99,7 @@ const Form = ({ item }: { item?: RecipientT }) => {
 			<InputText id="phone" form={f} placeholder={t('t.phone')} />
 			<InputText id="notes" form={f} placeholder={t('t.notes')} />
 			<InputPrice id="hourlyRate" form={f} placeholder={t('t.hourlyRate')} />
+			<MultiSelect id="serviceGroups" form={f} placeholder={t('t.workers')} />
 			<Select
 				id="approveBy"
 				form={f}

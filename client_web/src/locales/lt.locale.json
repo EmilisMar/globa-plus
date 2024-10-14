@@ -1,5 +1,7 @@
 {
 	"addSignature": "Pridėti parašą",
+	"addSignatureClear": "Išvalyti",
+	"addSignatureSave": "Patvirtinti parašą",
 	"addTime": "Pridėti laiką",
 	"admin_signin": "Administratoriaus prisijungimas",
 	"auth_invalid_token": "Neteisingas žetonas",

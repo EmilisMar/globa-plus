@@ -12,6 +12,7 @@
 .env*
 .expo/
 .metro-health-check*
+.vscode/
 build/
 dist/
 node_modules/

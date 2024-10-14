@@ -1,5 +1,7 @@
 {
 	"addSignature": "Add Signature",
+	"addSignatureClear": "Clear",
+	"addSignatureSave": "Save and Approve",
 	"addTime": "Add Time",
 	"admin_signin": "Admin Sign In",
 	"auth_invalid_token": "Invalid Token",

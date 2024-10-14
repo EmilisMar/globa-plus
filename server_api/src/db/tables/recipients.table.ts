@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm'
 import {
 	doublePrecision,
 	json,
@@ -20,12 +21,15 @@ export const RecipientsTable = pgTable('recipients', {
 	lastName: varchar('last_name', { length: 256 }).notNull(),
 	hourlyRate: doublePrecision('hourly_rate').notNull(),
 	address: json('address')
-		.$type<AddressT>()
+		.$type<{ adddress_line: string; town: string; postCode: string; country: string }>()
 		.$default(() => ({ adddress_line: '', town: '', postCode: '', country: '' })),
 	phone: varchar('phone', { length: 256 }).notNull(),
 	approveBy: varchar('approve_by', { length: 10, enum: ApproveByE }),
 	email: varchar('email', { length: 256 }),
 	notes: varchar('notes'),
+	serviceGroups: varchar('service_groups')
+		.array()
+		.default(sql`'{}'::text[]`),
 	createdBy: varchar('created_by')
 		.references(() => UsersTable.pid)
 		.notNull(),
@@ -33,10 +37,3 @@ export const RecipientsTable = pgTable('recipients', {
 })
 
 export type RecipientT = typeof RecipientsTable.$inferSelect
-
-type AddressT = {
-	adddress_line: string
-	town: string
-	postCode: string
-	country: string
-}
