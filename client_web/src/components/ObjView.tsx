@@ -93,40 +93,37 @@ const C = ({ k, v }: { k: string; v: ObjValT }) => {
 				{v.map((p) => {
 					if (p.services.length === 0) return null
 					return (
-						<>
-							<Accordion.Item key={1} value={p.pid} className="mb-2">
-								<Accordion.Control>{lo[p.name] || p.name}</Accordion.Control>
-								<Accordion.Panel>
-									<InputWrapper
-										key={p.pid}
-										style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 16 }}
-									>
-										{p.services.map(
-											(p: { pid: string; name: string; actionStatus: 'SERVICE_COMPLETED' }) => {
-												return (
-													<Checkbox
-														key={p.pid}
-														pid={p.pid}
-														label={lo[p.name] || p.name}
-														isChecked={!!p.actionStatus}
-														onClick={async (sPid: string) => {
-															const visit = useStateData.getState().visit
-															if (!visit) return
-															await API_POST_VisitAction({
-																vPid: visit.pid,
-																status: p.actionStatus ? 'SERVICE_UNCHECK' : 'SERVICE_COMPLETED',
-																sPid: sPid,
-																body: {},
-															})
-														}}
-													/>
-												)
-											},
-										)}
-									</InputWrapper>
-								</Accordion.Panel>
-							</Accordion.Item>
-						</>
+						<Accordion.Item key={p.pid} value={p.pid} className="mb-2">
+							<Accordion.Control>{lo[p.name] || p.name}</Accordion.Control>
+							<Accordion.Panel>
+								<InputWrapper
+									style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 16 }}
+								>
+									{p.services.map(
+										(p: { pid: string; name: string; actionStatus: 'SERVICE_COMPLETED' }) => {
+											return (
+												<Checkbox
+													key={p.pid}
+													pid={p.pid}
+													label={lo[p.name] || p.name}
+													isChecked={!!p.actionStatus}
+													onClick={async (sPid: string) => {
+														const visit = useStateData.getState().visit
+														if (!visit) return
+														await API_POST_VisitAction({
+															vPid: visit.pid,
+															status: p.actionStatus ? 'SERVICE_UNCHECK' : 'SERVICE_COMPLETED',
+															sPid: sPid,
+															body: {},
+														})
+													}}
+												/>
+											)
+										},
+									)}
+								</InputWrapper>
+							</Accordion.Panel>
+						</Accordion.Item>
 					)
 				})}
 			</Accordion>
