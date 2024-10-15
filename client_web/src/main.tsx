@@ -7,7 +7,6 @@ import { createRoot } from 'react-dom/client'
 import type { RouteObject } from 'react-router-dom'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
-
 import { MantineProvider } from '@mantine/core'
 import { ModalsProvider } from '@mantine/modals'
 

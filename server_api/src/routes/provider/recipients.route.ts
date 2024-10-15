@@ -1,5 +1,4 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
-
 import { Type as t } from '@sinclair/typebox'
 
 import {
@@ -64,6 +63,7 @@ export const EditRecipientS = {
 			phone: t.String(),
 			notes: t.Optional(t.String()),
 			hourlyRate: t.Number(),
+			serviceGroups: t.Array(t.String()),
 			approveBy: t.Enum(arrToObj(ApproveByE)),
 			email: t.Optional(t.String({ format: 'email' })),
 		},

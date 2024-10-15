@@ -1,7 +1,6 @@
 import 'dotenv/config'
 
 import Fastify from 'fastify'
-
 import cors from '@fastify/cors'
 import { TypeBoxValidatorCompiler, type TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 
@@ -10,7 +9,7 @@ import { apCreateCategory } from './routes/admin/categories.route'
 import { createProvider } from './routes/admin/providers.route'
 import { createRecipient } from './routes/admin/recipients.route'
 import { createService } from './routes/admin/services.route'
-import { getOptions, pGetOptions } from './routes/options.route'
+import { apGetOptions, getOptions } from './routes/options.route'
 import { pGetCategories } from './routes/provider/categories.route'
 import {
 	pCreateRecipient,
@@ -78,6 +77,7 @@ Fastify()
 					req.token = token
 				})
 				.get('/:tableName', getTable)
+				.get('/options/:entity', apGetOptions)
 				.post('/categories', apCreateCategory)
 				.post('/providers', createProvider)
 				.post('/recipients', createRecipient)
@@ -93,7 +93,7 @@ Fastify()
 					if (token.role !== 'provider') throw err(401)
 					req.token = token
 				})
-				.get('/options/:entity', pGetOptions)
+				.get('/options/:entity', apGetOptions)
 				.get('/categories', pGetCategories)
 				.post('/categories', apCreateCategory)
 				.get('/recipients', pGetRecipients)

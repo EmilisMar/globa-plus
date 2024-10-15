@@ -1,7 +1,7 @@
 import './AgendaCalendar.css'
 
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
 import type { DateSelectArg, EventSourceInput } from '@fullcalendar/core/index.js'
 import type { EventImpl } from '@fullcalendar/core/internal'
 import en from '@fullcalendar/core/locales/en-gb'
@@ -26,6 +26,22 @@ export const AgendaCalendar = ({
 	setOnNewVisit: (e: DateSelectArg) => void
 }) => {
 	const nav = useNavigate()
+	const [tt, setTt] = useState<{ v: boolean; c: string; x: number; y: number }>({
+		v: false,
+		c: '',
+		x: 0,
+		y: 0,
+	})
+
+	const showTooltip = (e: { el: HTMLElement }, c: string): void => {
+		const r = e.el.getBoundingClientRect() as DOMRect
+		setTt({ v: true, c, x: r.left + window.scrollX, y: r.top + window.scrollY - 50 })
+	}
+
+	const hideTooltip = (): void => {
+		setTt({ v: false, c: '', x: 0, y: 0 })
+	}
+
 	return (
 		<div className="overflow-auto rounded-lg bg-[--white]">
 			<div className="my-2 mb-4 w-fit">
@@ -59,7 +75,17 @@ export const AgendaCalendar = ({
 				selectable
 				weekends
 				eventClick={(e) => nav(`/provider/dashboard/visits/${e.event.id}`)}
+				eventMouseEnter={(e) => showTooltip(e, e.event.extendedProps.recipientName)}
+				eventMouseLeave={hideTooltip}
 			/>
+			{tt.v && (
+				<div
+					className={`bg-red-500 absolute z-10 rounded-md bg-[--Primary] px-4 py-2 text-white`}
+					style={{ left: tt.x, top: tt.y }}
+				>
+					{tt.c}
+				</div>
+			)}
 		</div>
 	)
 }

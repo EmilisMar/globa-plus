@@ -1,4 +1,7 @@
+import { toastErr } from '../components/Toast'
+import { UsersE } from '../enums/users.enum'
 import { req } from '../providers/axios.provider'
+import { useStateUser } from '../states/user.state'
 
 import type { TableOptionsT } from './types/options.api.type'
 
@@ -7,7 +10,9 @@ export const API_GET_Options = async (tableName: TableOptionsT) => {
 }
 
 export const API_GET_OptionsV2 = async (tableName: 'categories_groups') => {
-	return await req.get<{ value: string; label: string }[]>(`/provider/entity/options/${tableName}`)
+	const role = useStateUser.getState().user?.role
+	if (!role) toastErr(UsersE.USER_ROLE_NOT_FOUND)
+	return await req.get<{ value: string; label: string }[]>(`/${role}/entity/options/${tableName}`)
 }
 
 export const API_GET_Entity_Options = async (tableName: 'workers') => {

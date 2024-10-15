@@ -1,3 +1,4 @@
+import { sql } from 'kysely'
 import { getDistance } from '@mariuzm/utils'
 
 import { dbk } from '../../providers/kysely.provider'
@@ -52,10 +53,19 @@ export const q_get_workers_t = async (tPid: string) => {
 
 export const q_get_worker_visits = async (pid: string) => {
 	return await dbk
-		.selectFrom('visits')
-		.where('worker_pid', '=', pid)
-		.orderBy('id', 'desc')
-		.select(['pid as id', 'worker_pid as workerPid', 'time_from as start', 'time_to as end'])
+		.selectFrom('visits as v')
+		.leftJoin('recipients as r', 'r.pid', 'v.recipient_pid')
+		.where('v.worker_pid', '=', pid)
+		.orderBy('v.id', 'desc')
+		.select((e) => [
+			'v.pid as id',
+			'v.worker_pid as workerPid',
+			'v.time_from as start',
+			'v.time_to as end',
+			sql<string>`concat(${e.ref('r.first_name')}, ' ', ${e.ref('r.last_name')})`.as(
+				'recipientName',
+			),
+		])
 		.execute()
 }
 

@@ -1,6 +1,6 @@
-import type { DateSelectArg } from '@fullcalendar/core/index.js'
 import { useEffect, useState } from 'react'
 import { useLoaderData, useParams } from 'react-router-dom'
+import type { DateSelectArg } from '@fullcalendar/core/index.js'
 
 import { API_GET_WorkerVisits } from '../../apis/entities/workers.api.entity'
 import type { GetWorkerVisitT } from '../../apis/types/entities.api.type'

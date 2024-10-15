@@ -13,6 +13,7 @@ export type GetWorkerVisitT = {
 	workerPid: string
 	start: string
 	end: string
+	recipientName: string
 }
 
 export type RecipientT = {

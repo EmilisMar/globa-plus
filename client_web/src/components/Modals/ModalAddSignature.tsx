@@ -1,4 +1,5 @@
 import { createRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import SignaturePad from 'react-signature-pad-wrapper'
 
 import { useT } from '../../utils/i18n.util'
@@ -19,6 +20,7 @@ export const ModalAddSignature = ({
 }) => {
 	const ref = createRef<SignaturePad>()
 	const t = useT()
+	const nav = useNavigate()
 	return (
 		<ModalContainer opened={opened} onClose={close} title={title}>
 			<div style={{ marginBottom: -20, marginLeft: -20, marginRight: -20 }}>
@@ -43,6 +45,7 @@ export const ModalAddSignature = ({
 							if (ref.current) {
 								const sig = ref.current.toDataURL()
 								await onApprove({ action: 'ENDED', sig })
+								nav('/worker/dashboard/visits')
 								close()
 							}
 						}}
