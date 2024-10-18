@@ -1,7 +1,6 @@
 import type { NotNull } from 'kysely'
 import { expressionBuilder, sql } from 'kysely'
 import { jsonArrayFrom, jsonObjectFrom } from 'kysely/helpers/postgres'
-
 import { generateEvents } from '@mariuzm/utils'
 
 import { dbk } from '../../providers/kysely.provider'
@@ -40,16 +39,14 @@ export const q_w_get_visits_t = async (tPid: string, dateFrom?: string, dateEnd?
 		.selectFrom('visits as v')
 		.leftJoin('recipients as r', 'r.pid', 'v.recipient_pid')
 		.where('v.worker_pid', '=', tPid)
-		.where((e) => 
-			e.or([e('v.status', '!=', 'APPROVED'), e('v.status', '!=', 'CANCELLED')])
-		);
+		.where((e) => e.or([e('v.status', '!=', 'APPROVED'), e('v.status', '!=', 'CANCELLED')]))
 
 	if (dateFrom) {
-		query = query.where('v.time_from', '>=', new Date(dateFrom));
+		query = query.where('v.time_from', '>=', new Date(dateFrom))
 	}
 
 	if (dateEnd) {
-		query = query.where('v.time_to', '<', new Date(dateEnd));
+		query = query.where('v.time_to', '<', new Date(dateEnd))
 	}
 
 	return await query
@@ -67,8 +64,8 @@ export const q_w_get_visits_t = async (tPid: string, dateFrom?: string, dateEnd?
 			'v.time_to as timeTo',
 			'v.status',
 		])
-		.execute();
-};
+		.execute()
+}
 
 export const q_p_get_visit = async (tPid: string, vPid: string) => {
 	const q = await dbk
@@ -235,7 +232,11 @@ const getCategories = () => {
 		e
 			.selectFrom('categories as c')
 			.leftJoin('users as u', 'u.pid', 'c.created_by')
+			.leftJoin('recipients as r', 'r.pid', 'v.recipient_pid')
 			.where((e) => e.or([e('u.pid', '=', e.ref('v.created_by')), e('u.role', '=', 'admin')]))
+			.where(({ eb, fn }) =>
+				eb('c.category_group_pid', '=', fn.any(fn.coalesce('r.service_groups', sql<[]>`'{}'`))),
+			)
 			.select((e) => [
 				'c.pid',
 				'c.name',
