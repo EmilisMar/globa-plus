@@ -173,11 +173,12 @@ export const q_a_get_recipients_report_t = async ({ dateFrom }: { dateFrom?: str
 export const q_p_get_recipients_report_t = async ({
 	tPid,
 	dateFrom,
+	dateEnd: dateTo,
 }: {
 	tPid: string
 	dateFrom?: string
+	dateEnd?: string
 }) => {
-	const dateTo = getEndOfMonth(dateFrom)
 	const a: Expression<SqlBool>[] = []
 	const q = await dbk
 		.selectFrom('recipients as r')

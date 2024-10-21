@@ -82,7 +82,10 @@ export const pEditRecipient = {
 }
 
 const GetReportsS = {
-	querystring: t.Object({ dateFrom: t.Optional(t.String()) }, { additionalProperties: false }),
+	querystring: t.Object(
+		{ dateFrom: t.Optional(t.String()), dateEnd: t.Optional(t.String()) },
+		{ additionalProperties: false },
+	),
 }
 
 export const pGetReports = {
@@ -92,6 +95,7 @@ export const pGetReports = {
 			await q_p_get_recipients_report_t({
 				tPid: req.token.pid,
 				dateFrom: req.query.dateFrom,
+				dateEnd: req.query.dateEnd,
 			}),
 		)
 	},
