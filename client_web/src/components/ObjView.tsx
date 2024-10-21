@@ -94,7 +94,9 @@ const C = ({ k, v }: { k: string; v: ObjValT }) => {
 					if (p.services.length === 0) return null
 					return (
 						<Accordion.Item key={p.pid} value={p.pid} className="mb-2">
-							<Accordion.Control>{lo[p.name] || p.name}</Accordion.Control>
+							<Accordion.Control classNames={{ label: 'normal-case' }}>
+								{lo[p.name] || p.name}
+							</Accordion.Control>
 							<Accordion.Panel>
 								<InputWrapper
 									style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 16 }}

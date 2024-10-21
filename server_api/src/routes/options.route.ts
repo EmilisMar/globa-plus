@@ -22,11 +22,11 @@ export const getOptions = {
 	) => {
 		switch (req.params.tableName) {
 			case 'providers':
-				return res.code(200).send(await q_get_users_opt('provider'))
+				return res.code(200).send(await q_get_users_opt('provider', req.token.pid))
 			case 'recipients':
 				return res.code(200).send(await q_get_recipients_opt())
 			case 'workers':
-				return res.code(200).send(await q_get_users_opt('worker'))
+				return res.code(200).send(await q_get_users_opt('worker', req.token.pid))
 			case 'categories':
 				return res.code(200).send(await q_get_categories_opt(req.token.pid))
 			case 'categories_groups':

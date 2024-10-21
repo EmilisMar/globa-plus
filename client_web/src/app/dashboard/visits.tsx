@@ -1,5 +1,5 @@
-import { useForm } from '@mariuzm/form'
 import { useEffect, useState } from 'react'
+import { useForm } from '@mariuzm/form'
 
 import { API_POST_Visit } from '../../apis/entities/visits.api.entity'
 import { Checkbox } from '../../components/BuilderForm/components/Checkbox'
@@ -59,13 +59,6 @@ export const FormVisit = ({
 			})}
 			style={{ display: 'flex', flexDirection: 'column', gap: 20 }}
 		>
-			<SelectAPI
-				id="workerPid"
-				form={f}
-				placeholder={visit?.workerPid || t('selectWorker')}
-				option="workers"
-				isDisabled={!!visit?.workerPid}
-			/>
 			<SelectAPI
 				id="recipientPid"
 				form={f}

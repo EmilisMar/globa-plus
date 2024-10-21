@@ -92,6 +92,7 @@ export const q_p_edit_recipient = async (body: EditRecipientT, pid: string) => {
 			phone: body.phone,
 			notes: body.notes,
 			hourly_rate: body.hourlyRate,
+			service_groups: body.serviceGroups,
 			approve_by: body.approveBy,
 			email: body.email,
 		})

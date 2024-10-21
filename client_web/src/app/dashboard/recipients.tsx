@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useForm, useWatch } from '@mariuzm/form'
 
-import { API_Patch_Recipient, API_POST_Recipient } from '../../apis/entities/recipients.api.entity'
+import { API_PATCH_Recipient, API_POST_Recipient } from '../../apis/entities/recipients.api.entity'
 import type { RecipientT } from '../../apis/types/entities.api.type'
 import { RecipientApprovByE } from '../../apis/types/entities.api.type'
 import { InputPrice } from '../../components/BuilderForm/components/InputPrice'
@@ -74,7 +74,7 @@ const Form = ({ item }: { item?: RecipientT }) => {
 			onSubmit={f.handleSubmit(async (form) => {
 				setIsLoading(true)
 				const res = item
-					? await API_Patch_Recipient(form, item.pid)
+					? await API_PATCH_Recipient(form, item.pid)
 					: await API_POST_Recipient(form)
 				if (res) {
 					!item && f.reset()

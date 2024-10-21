@@ -67,12 +67,19 @@ export const q_get_user_detail = async ({ pid, role }: { pid: string; role: User
 	return d
 }
 
-export const q_get_users_opt = async (role: UserRoleT) => {
-	return await dbk
-		.selectFrom('users')
-		.where('role', '=', role)
-		.select(['pid as value', 'email as label'])
-		.execute()
+export const q_get_users_opt = async (role: UserRoleT, tPid: string) => {
+	let q = dbk.selectFrom('users as u').where('role', '=', role)
+	if (role === 'provider') {
+		q = q
+			.innerJoin('users_providers as ur', 'ur.pid', 'u.pid')
+			.where((e) => e.or([e(e.ref('ur.created_by'), '=', tPid), e('u.role', '=', 'admin')]))
+	}
+	if (role === 'worker') {
+		q = q
+			.innerJoin('users_workers as ur', 'ur.pid', 'u.pid')
+			.where((e) => e.or([e(e.ref('ur.created_by'), '=', tPid), e('u.role', '=', 'admin')]))
+	}
+	return await q.select(['u.pid as value', 'u.email as label']).execute()
 }
 
 export const q_get_worker_opt = async (tPid: string) => {
