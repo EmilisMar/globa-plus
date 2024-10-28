@@ -105,6 +105,7 @@
 		"services": "Services",
 		"servicesCompleted": "Service Completed",
 		"servicesCompletedHours": "Service Completed Hours",
+		"serviceGroup": "Service Group",
 		"status": "Status",
 		"time": "Time",
 		"timeFrom": "Time From",
@@ -114,6 +115,7 @@
 		"visitLogs": "Visit Logs",
 		"visits": "Visits",
 		"visitsCount": "Visits Count",
+		"visitConfirmationMethod": "Visit Confirmation Method",
 		"workers": "Workers"
 	},
 	"o": {

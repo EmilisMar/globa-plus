@@ -66,6 +66,7 @@ export const lo: Record<string, string> = {
 	services: t('t.services'),
 	servicesCompleted: t('t.servicesCompleted'),
 	servicesCompletedHours: t('t.servicesCompletedHours'),
+	serviceGroup: t('t.serviceGroup'),
 	status: t('t.status'),
 	time: t('t.time'),
 	timeFrom: t('t.timeFrom'),
@@ -75,5 +76,6 @@ export const lo: Record<string, string> = {
 	visitLogs: t('t.visitLogs'),
 	visits: t('t.visits'),
 	visitsCount: t('t.visitsCount'),
+	visitConfirmationMethod: t('t.visitConfirmationMethod'),
 	workers: t('t.workers'),
 }
