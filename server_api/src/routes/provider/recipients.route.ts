@@ -6,6 +6,7 @@ import {
 	q_ap_create_recipient,
 	q_p_edit_recipient,
 	q_p_get_recipient,
+	q_p_get_recipients_options_t,
 	q_p_get_recipients_report_t,
 } from '../../db/queries/recipients.query'
 import { ApproveByE } from '../../db/tables/recipients.table'
@@ -30,6 +31,12 @@ export const pGetRecipient = {
 export const pGetRecipients = {
 	handler: async (req: FastifyRequest, res: FastifyReply) => {
 		res.code(200).send(await q_a_get_recipients_with_admins_t(req.token.pid))
+	},
+}
+
+export const pGetRecipientsOptions = {
+	handler: async (req: FastifyRequest, res: FastifyReply) => {
+		res.code(200).send(await q_p_get_recipients_options_t(req.token.pid))
 	},
 }
 

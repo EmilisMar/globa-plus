@@ -24,7 +24,7 @@ export const getOptions = {
 			case 'providers':
 				return res.code(200).send(await q_get_users_opt('provider', req.token.pid))
 			case 'recipients':
-				return res.code(200).send(await q_get_recipients_opt())
+				return res.code(200).send(await q_get_recipients_opt(req.token.pid))
 			case 'workers':
 				return res.code(200).send(await q_get_users_opt('worker', req.token.pid))
 			case 'categories':

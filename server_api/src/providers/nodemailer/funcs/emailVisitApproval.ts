@@ -16,7 +16,7 @@ export const emailVisitApproval = ({
 	const mailOptions = {
 		from: `"Globa Plius" <${process.env.EMAIL_USER}>`,
 		to: email,
-		subject: 'Email Visit Approval',
+		subject: 'Paslaugų teikimo patvirtinimas',
 		html: template({ name, link: `${process.env.WEB_ADMIN_URL}/visit-approval/${vPid}` }),
 	}
 	sendMail(mailOptions)

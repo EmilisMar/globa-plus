@@ -38,6 +38,17 @@ export const q_a_get_recipients_with_admins_t = async (tPid: string) => {
 		.execute()
 }
 
+export const q_p_get_recipients_options_t = async (tPid: string) => {
+	return await dbk
+		.selectFrom('recipients')
+		.where('created_by', '=', tPid)
+		.select((e) => [
+			'pid as value',
+			sql<string>`concat(${e.ref('first_name')}, ' ', ${e.ref('last_name')})`.as('label'),
+		])
+		.execute()
+}
+
 export const q_p_get_recipient = async (pid: string) => {
 	const q = await dbk
 		.selectFrom('recipients')
@@ -113,12 +124,15 @@ export const q_p_edit_recipient = async (body: EditRecipientT, pid: string) => {
 	return q
 }
 
-export const q_get_recipients_opt = async () => {
+export const q_get_recipients_opt = async (tPid: string) => {
 	return await dbk
-		.selectFrom('recipients')
+		.selectFrom('recipients as r')
+		.leftJoin('users as u', 'u.pid', 'r.created_by')
+		.where((e) => e.or([e(e.ref('r.created_by'), '=', tPid), e('u.role', '=', 'admin')]))
 		.select((e) => [
-			'pid as value',
-			sql<string>`concat(${e.ref('first_name')}, ' ', ${e.ref('last_name')})`.as('label'),
+			'r.pid as value',
+			'r.created_by as createdBy',
+			sql<string>`concat(${e.ref('r.first_name')}, ' ', ${e.ref('r.last_name')})`.as('label'),
 		])
 		.execute()
 }

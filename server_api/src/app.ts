@@ -16,6 +16,7 @@ import {
 	pEditRecipient,
 	pGetRecipient,
 	pGetRecipients,
+	pGetRecipientsOptions,
 	pGetReports,
 } from './routes/provider/recipients.route'
 import { pCreateServices, pGetService } from './routes/provider/services.route'
@@ -97,6 +98,7 @@ Fastify()
 				.get('/categories', pGetCategories)
 				.post('/categories', apCreateCategory)
 				.get('/recipients', pGetRecipients)
+				.get('/recipients/options', pGetRecipientsOptions)
 				.get('/recipients/:recipientPid', pGetRecipient)
 				.post('/recipients', pCreateRecipient)
 				.patch('/recipients/:recipientPid', pEditRecipient)

@@ -55,6 +55,28 @@ export const Select = <T extends object>({
 	)
 }
 
+export const SelectBase = ({
+	placeholder,
+	options,
+	onChange,
+}: {
+	placeholder?: string
+	options: SelectOptionT[]
+	onChange?: (value: string | null) => void
+}) => {
+	return (
+		<MSelect
+			onChange={onChange}
+			placeholder={placeholder}
+			data={options}
+			styles={{
+				input: { color: Color.Text, backgroundColor: Color.Bg },
+				options: { color: Color.Text },
+			}}
+		/>
+	)
+}
+
 export const SelectAPI = <T extends object>({
 	id,
 	form,
@@ -145,7 +167,15 @@ export const SelectAPIV2 = <T extends object>({
 	)
 }
 
-export const SelectBaseAPI = ({ initVal, entity }: { initVal: string; entity: 'workers' }) => {
+export const SelectBaseAPI = ({
+	initVal,
+	entity,
+	placeholder,
+}: {
+	initVal: string
+	entity: 'workers'
+	placeholder?: string
+}) => {
 	const [isLoading, setIsLoading] = useState(true)
 	const [data, setData] = useState<SelectOptionT[]>([])
 	const [value, setValue] = useState<string | null>(initVal)
@@ -173,6 +203,38 @@ export const SelectBaseAPI = ({ initVal, entity }: { initVal: string; entity: 'w
 			onChange={onChange}
 			data={data}
 			rightSection={isLoading && <Spinner />}
+			placeholder={placeholder}
+		/>
+	)
+}
+
+export const SelectBaseAPIV2 = ({
+	entity,
+	placeholder,
+	onChange,
+}: {
+	entity: 'workers' | 'recipients'
+	placeholder?: string
+	onChange?: (val: string | null) => void
+}) => {
+	const [isLoading, setIsLoading] = useState(true)
+	const [data, setData] = useState<SelectOptionT[]>([])
+
+	useEffect(() => {
+		const main = async () => {
+			setData(await API_GET_Entity_Options(entity))
+			setIsLoading(false)
+		}
+		main()
+	}, [entity])
+
+	return (
+		<MSelect
+			classNames={{ dropdown: 'text-[--PrimaryDark]' }}
+			onChange={onChange}
+			data={data}
+			rightSection={isLoading && <Spinner />}
+			placeholder={placeholder}
 		/>
 	)
 }

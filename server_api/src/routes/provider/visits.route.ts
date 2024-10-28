@@ -1,5 +1,4 @@
-import type { FastifyReply, FastifyRequest } from 'fastify'
-
+import type { FastifyReply } from 'fastify'
 import { Type as t } from '@sinclair/typebox'
 
 import {
@@ -18,9 +17,42 @@ import {
 import type { FastReqT } from '../../types/fastify.type'
 import { arrToObj } from '../../utils/obj.util'
 
+const GetVisitsS = {
+	querystring: t.Object(
+		{
+			dateFrom: t.Optional(t.String()),
+			dateEnd: t.Optional(t.String()),
+			status: t.Optional(
+				t.Union([
+					t.Literal('NOT_STARTED'),
+					t.Literal('STARTED'),
+					t.Literal('PAUSED'),
+					t.Literal('CANCELLED'),
+					t.Literal('ENDED'),
+				]),
+			),
+			workerPid: t.Optional(t.String()),
+			recipientPid: t.Optional(t.String()),
+		},
+		{ additionalProperties: false },
+	),
+}
+
 export const pGetVisits = {
-	handler: async (req: FastifyRequest, res: FastifyReply) => {
-		return res.code(200).send(await q_p_get_visits_t(req.token.pid))
+	schema: GetVisitsS,
+	handler: async (req: FastReqT<typeof GetVisitsS>, res: FastifyReply) => {
+		return res
+			.code(200)
+			.send(
+				await q_p_get_visits_t(
+					req.token.pid,
+					req.query.status,
+					req.query.dateFrom,
+					req.query.dateEnd,
+					req.query.workerPid,
+					req.query.recipientPid,
+				),
+			)
 	},
 }
 

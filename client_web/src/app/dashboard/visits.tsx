@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from '@mariuzm/form'
 
 import { API_POST_Visit } from '../../apis/entities/visits.api.entity'
+import { WorkerVisitT } from '../../apis/types/entities.api.type'
 import { Checkbox } from '../../components/BuilderForm/components/Checkbox'
 import { DateTimePicker } from '../../components/BuilderForm/components/DateTimePicker'
 import { SelectAPI } from '../../components/BuilderForm/components/Select/Select'
@@ -11,6 +12,14 @@ import { Button } from '../../components/Button'
 import { toastSuccess } from '../../components/Toast'
 import { useStateUser } from '../../states/user.state'
 import { useT } from '../../utils/i18n.util'
+
+const visitStatuses: WorkerVisitT['status'][] = [
+	'NOT_STARTED',
+	'STARTED',
+	'PAUSED',
+	'CANCELLED',
+	'ENDED',
+]
 
 export const VisitsPage = () => {
 	const isWorker = useStateUser((s) => s.user?.role === 'worker')
@@ -23,6 +32,8 @@ export const VisitsPage = () => {
 				modalTitle={t('createVisit')}
 				{...(isWorker ? null : { Form: FormVisit })}
 				isDetail
+				status={visitStatuses.map((s) => ({ value: s, label: t(`s.${s}` as any) }))}
+				isVisit
 			/>
 		</div>
 	)

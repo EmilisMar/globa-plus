@@ -86,6 +86,7 @@
 		"createdBy": "Sukūrė",
 		"createdByEmail": "Sukūrės el. paštas",
 		"createdByRole": "Sukūrės rolė",
+		"dateFromTo": "Data nuo iki",
 		"email": "El. paštas",
 		"firstName": "Vardas",
 		"fullName": "Pilnas vardas",

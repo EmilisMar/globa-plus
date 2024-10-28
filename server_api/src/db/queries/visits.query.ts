@@ -10,8 +10,15 @@ import { genId } from '../../utils/genId.util'
 import type { DB } from '../main.tables'
 import type { VisitStatusT } from '../tables/visits.table'
 
-export const q_p_get_visits_t = async (tPid: string) => {
-	return await dbk
+export const q_p_get_visits_t = async (
+	tPid: string,
+	status?: VisitStatusT,
+	dateFrom?: string,
+	dateEnd?: string,
+	workerPid?: string,
+	recipientPid?: string,
+) => {
+	let q = dbk
 		.selectFrom('visits as v')
 		.leftJoin('users_workers as uw', 'uw.pid', 'v.worker_pid')
 		.leftJoin('recipients as r', 'r.pid', 'v.recipient_pid')
@@ -31,7 +38,12 @@ export const q_p_get_visits_t = async (tPid: string) => {
 			'v.time_to as timeTo',
 			'v.status',
 		])
-		.execute()
+	if (status) q = q.where('v.status', '=', status)
+	if (dateFrom) q = q.where('v.time_from', '>=', new Date(dateFrom))
+	if (dateEnd) q = q.where('v.time_to', '<=', new Date(dateEnd))
+	if (workerPid) q = q.where('v.worker_pid', '=', workerPid)
+	if (recipientPid) q = q.where('v.recipient_pid', '=', recipientPid)
+	return await q.execute()
 }
 
 export const q_w_get_visits_t = async (tPid: string, dateFrom?: string, dateEnd?: string) => {

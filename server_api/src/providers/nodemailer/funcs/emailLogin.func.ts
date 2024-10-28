@@ -16,7 +16,7 @@ export const emailLogin = ({
 	const mailOptions = {
 		from: `"Globa Plius" <${process.env.EMAIL_USER}>`,
 		to: email,
-		subject: 'Email Validation',
+		subject: 'Nuoroda prisijungimui',
 		html: template({ name, link: `${process.env.WEB_ADMIN_URL}/validate/${token}` }),
 	}
 	sendMail(mailOptions)

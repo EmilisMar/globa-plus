@@ -15,6 +15,6 @@ export const API_GET_OptionsV2 = async (tableName: 'categories_groups') => {
 	return await req.get<{ value: string; label: string }[]>(`/${role}/entity/options/${tableName}`)
 }
 
-export const API_GET_Entity_Options = async (tableName: 'workers') => {
+export const API_GET_Entity_Options = async (tableName: 'workers' | 'recipients') => {
 	return await req.get<{ value: string; label: string }[]>(`/provider/entity/${tableName}/options`)
 }
