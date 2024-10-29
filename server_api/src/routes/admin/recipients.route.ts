@@ -14,10 +14,13 @@ export const CreateRecipientS = {
 			address: t.Optional(
 				t.Object(
 					{
+						full_address: t.String(),
 						adddress_line: t.String(),
 						town: t.String(),
 						postCode: t.String(),
 						country: t.String(),
+						latitude: t.Union([t.Number(), t.Null()]),
+						longitude: t.Union([t.Number(), t.Null()]),
 					},
 					{ additionalProperties: false },
 				),

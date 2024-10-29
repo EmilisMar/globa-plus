@@ -29,6 +29,7 @@
 		"@mantine/notifications": "^7.13.2",
 		"@mariuzm/form": "1.0.2",
 		"@mariuzm/utils": "^1.5.8",
+		"@react-google-maps/api": "^2.20.3",
 		"@tabler/icons-react": "^3.19.0",
 		"axios": "^1.7.7",
 		"babel-plugin-react-compiler": "latest",

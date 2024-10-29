@@ -11,20 +11,28 @@ export const InputText = <T extends object>({
 	form,
 	isDisabled,
 	placeholder,
+	onChange: customOnChange,
 }: Form<T> & {
 	isDisabled?: boolean
 	placeholder?: string
+	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }) => {
 	return (
 		<Controller
 			name={id}
 			control={form.control}
 			render={({ field: { onChange, value }, fieldState: { error } }) => {
+				// Wrap the default onChange to handle custom logic if provided
+				const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+					onChange(e)
+					if (customOnChange) customOnChange(e)
+				}
+				
 				return (
 					<div>
 						<TextInput
 							value={value || ''}
-							onChange={onChange}
+							onChange={handleChange}
 							placeholder={placeholder || textFormat(id)}
 							variant="filled"
 							disabled={isDisabled}
