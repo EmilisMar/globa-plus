@@ -99,11 +99,11 @@ const Form = ({ item }: { item?: RecipientT }) => {
 			<InputText id="phone" form={f} placeholder={t('t.phone')} />
 			<InputText id="notes" form={f} placeholder={t('t.notes')} />
 			<InputPrice id="hourlyRate" form={f} placeholder={t('t.hourlyRate')} />
-			<MultiSelect id="serviceGroups" form={f} placeholder={t('t.workers')} />
+			<MultiSelect id="serviceGroups" form={f} placeholder={t('t.serviceGroup')} />
 			<Select
 				id="approveBy"
 				form={f}
-				placeholder={t('t.approvedBy')}
+				placeholder={t('t.visitConfirmationMethod')}
 				options={[
 					{ value: 'email', label: t('o.email') },
 					{ value: 'signature', label: t('o.signature') },

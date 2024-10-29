@@ -106,6 +106,7 @@
 		"services": "Paslaugos",
 		"servicesCompleted": "Suteikta paslaugų",
 		"servicesCompletedHours": "Kontaktinis laikas",
+		"serviceGroup": "Paslaugų grupė",
 		"status": "Statusas",
 		"time": "Laikas",
 		"timeFrom": "Laikas nuo",
@@ -115,6 +116,7 @@
 		"visitLogs": "Vizitų žurnalas",
 		"visits": "Vizitai",
 		"visitsCount": "Vizitų skaičius",
+		"visitConfirmationMethod": "Vizito patvirtinimo būdas",
 		"workers": "Darbuotojai"
 	},
 	"o": {
