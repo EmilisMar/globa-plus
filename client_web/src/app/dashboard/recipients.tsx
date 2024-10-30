@@ -39,7 +39,6 @@ const Form = ({ item }: { item?: RecipientT }) => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null)
 	const [isPlaceSelected, setIsPlaceSelected] = useState<boolean>(false)
-	const [wasAddressChanged, setWasAddressChanged] = useState<boolean>(false)
 	const isAb = useWatch({ name: 'approveBy', control: f.control })
 	const user = useStateUser((s) => s.user)
 	const isProvider = !!(user && user.role === 'provider')
@@ -67,7 +66,7 @@ const Form = ({ item }: { item?: RecipientT }) => {
 		const addressLine = `${streetName} ${streetNumber}`.trim()
 		const town = place.address_components.find(comp => comp.types.includes("locality"))?.long_name || ""
 		const postCode = place.address_components.find(comp => comp.types.includes("postal_code"))?.long_name || ""
-		const country = place.address_components.find(comp => comp.types.includes("country"))?.long_name || ""
+		const country = place.address_components.find(comp => comp.types.includes("country"))?.long_name || "Lithuania"
 		const fullAddress = `${addressLine}, ${town}, ${postCode}, ${country}`
 		const lat = place.geometry?.location?.lat()
 		const lng = place.geometry?.location?.lng()
@@ -79,25 +78,7 @@ const Form = ({ item }: { item?: RecipientT }) => {
 		f.setValue('address.latitude', lat || null)
 		f.setValue('address.longitude', lng || null)
 		setIsPlaceSelected(true)
-
-		// Define required fields and their error messages
-		const FIELD_VALIDATIONS = [
-			{ field: streetName, message: t('t.streetNameRequired') },
-			{ field: town, message: t('t.townRequired') },
-			{ field: postCode, message: t('t.postCodeRequired') }
-		]
-
-		// Find the first missing field and set an error, if any
-		const missingField = FIELD_VALIDATIONS.find(({ field }) => !field)
-
-		if (missingField) {
-			f.setError('address.full_address', {
-				type: 'required',
-				message: missingField.message
-			})
-		} else {
-			f.clearErrors('address.full_address')
-		}
+		f.clearErrors('address.full_address')
 	}
 
 	const onLoad = (autocompleteInstance: google.maps.places.Autocomplete) => {
@@ -108,7 +89,6 @@ const Form = ({ item }: { item?: RecipientT }) => {
 	// Reset autocomplete field if manually changed by user
 	const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setIsPlaceSelected(false)
-		setWasAddressChanged(true)
 		f.clearErrors('address.full_address')
 	}
 
@@ -132,8 +112,7 @@ const Form = ({ item }: { item?: RecipientT }) => {
 			item.email && f.setValue('email', item.email)
 
 			f.clearErrors('address.full_address')
-			setIsPlaceSelected(false)
-			setWasAddressChanged(false)
+			setIsPlaceSelected(true)
 			return
 		} else {
 			f.reset()
@@ -152,7 +131,7 @@ const Form = ({ item }: { item?: RecipientT }) => {
 	return (
 		<form
 			onSubmit={f.handleSubmit(async (form) => {
-				if ((!item && form.address.full_address && !isPlaceSelected) || (item && wasAddressChanged && !isPlaceSelected)) {
+				if ((!isPlaceSelected)) {
 					f.setError('address.full_address', {
 						type: 'required',
 						message: t('t.selectCorrectAddress'),
@@ -167,7 +146,6 @@ const Form = ({ item }: { item?: RecipientT }) => {
 					!item && f.reset()
 					toastSuccess('Recipient created')
 					setIsPlaceSelected(false)
-					setWasAddressChanged(false)
 				}
 				setIsLoading(false)
 			})}
