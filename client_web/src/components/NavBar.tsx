@@ -1,5 +1,5 @@
-import { Tooltip, UnstyledButton } from '@mantine/core'
 import { NavLink, useLocation } from 'react-router-dom'
+import { UnstyledButton } from '@mantine/core'
 
 import { ROUTES_NAV } from '../main'
 import { Color, Style } from '../styles/base.style'
@@ -14,7 +14,7 @@ export const NavBar = () => {
 	const pn = useLocation().pathname.split('/')[1]
 	return (
 		<nav
-			className="flex h-[100vh] w-[80px] flex-col md:h-[80px] md:w-[100vw] md:flex-row-reverse"
+			className="flex h-[100vh] flex-col md:h-[80px] md:flex-row-reverse"
 			style={{
 				alignItems: 'center',
 				backgroundColor: Color.PrimaryDark,
@@ -29,55 +29,34 @@ export const NavBar = () => {
 			<div className="md:flex">
 				{Object.entries(ROUTES_NAV[pn]).map(([k, v]) => {
 					return (
-						<Tooltip
-							key={k}
-							label={v.name}
-							position="right"
-							transitionProps={{ duration: 0 }}
-							color={Color.PrimaryDark}
-							styles={{ tooltip: { backgroundColor: Color.PrimaryDarkHover, color: Color.White } }}
+						<NavLink
+							className="active:bg-primary-dark m-2 p-2 hover:bg-[var(--PrimaryDarkHover)]"
+							style={{
+								alignItems: 'center',
+								borderRadius: Style.Radius,
+								color: 'white',
+								display: 'flex',
+								height: ITEM_SIZE,
+							}}
+							to={`/${pn}/dashboard/${k}`}
 						>
-							<NavLink
-								className="active:bg-primary-dark hover:bg-[var(--PrimaryDarkHover)]"
-								style={{
-									alignItems: 'center',
-									borderRadius: Style.Radius,
-									color: 'white',
-									display: 'flex',
-									height: ITEM_SIZE,
-									justifyContent: 'center',
-									width: ITEM_SIZE,
-								}}
-								to={`/${pn}/dashboard/${k}`}
-							>
-								{v.icon}
-							</NavLink>
-						</Tooltip>
+							<div>{v.icon}</div>
+							<div className="ml-2 whitespace-nowrap md:hidden">{v.name}</div>
+						</NavLink>
 					)
 				})}
 			</div>
-			<Tooltip
-				label={t('auth_logout')}
-				position="right"
-				transitionProps={{ duration: 0 }}
-				color={Color.PrimaryDark}
-			>
+
+			<div className="flex w-full px-2">
 				<UnstyledButton
-					className="active:bg-primary-dark hover:bg-[var(--PrimaryDarkHover)]"
-					style={{
-						alignItems: 'center',
-						borderRadius: Style.Radius,
-						color: 'white',
-						display: 'flex',
-						height: ITEM_SIZE,
-						justifyContent: 'center',
-						width: ITEM_SIZE,
-					}}
+					className="active:bg-primary-dark flex w-full items-start p-2 hover:bg-[var(--PrimaryDarkHover)]"
+					style={{ borderRadius: Style.Radius, color: 'white' }}
 					onClick={logout}
 				>
 					<LogoutIcon />
+					<div className="ml-2 whitespace-nowrap md:hidden">{t('auth_logout')}</div>
 				</UnstyledButton>
-			</Tooltip>
+			</div>
 		</nav>
 	)
 }

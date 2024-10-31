@@ -70,6 +70,9 @@ export const FormVisit = ({
 			})}
 			style={{ display: 'flex', flexDirection: 'column', gap: 20 }}
 		>
+			{!cb && (
+				<SelectAPI id="workerPid" form={f} placeholder={t('selectWorker')} option="workers" />
+			)}
 			<SelectAPI
 				id="recipientPid"
 				form={f}

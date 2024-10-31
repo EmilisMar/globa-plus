@@ -51,20 +51,20 @@ export const q_p_get_recipients_options_t = async (tPid: string) => {
 
 export const q_p_get_recipient = async (pid: string) => {
 	const q = await dbk
-		.selectFrom('recipients')
-		.where('pid', '=', pid)
+		.selectFrom('recipients as r')
+		.where('r.pid', '=', pid)
 		.select([
-			'pid',
-			'first_name as firstName',
-			'last_name as lastName',
-			'hourly_rate as hourlyRate',
-			'address',
-			'phone',
-			'notes',
-			'service_groups as serviceGroups',
-			'approve_by as approveBy',
-			'email',
-			'created_by as createBy',
+			'r.pid',
+			'r.first_name as firstName',
+			'r.last_name as lastName',
+			'r.hourly_rate as hourlyRate',
+			'r.address',
+			'r.phone',
+			'r.notes',
+			'r.service_groups as serviceGroups',
+			'r.approve_by as approveBy',
+			'r.email',
+			'r.created_by as createBy',
 		])
 		.executeTakeFirst()
 	if (!q) throw err(404)

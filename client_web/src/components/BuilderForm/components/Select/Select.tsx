@@ -244,12 +244,20 @@ export const MultiSelect = <T extends object>({
 	form,
 	placeholder,
 	isDisabled,
+	isLoadData,
 }: Form<T> & {
 	placeholder?: string
 	isDisabled?: boolean
+	isLoadData?: boolean
 }) => {
 	const [isApiLoading, setIsApiLoading] = useState(false)
 	const [data, setData] = useState<SelectOptionT[]>([])
+	useEffect(() => {
+		const main = async () => {
+			if (isLoadData) setData(await API_GET_OptionsV2('categories_groups'))
+		}
+		main()
+	}, [isLoadData])
 	return (
 		<Controller
 			name={id}
