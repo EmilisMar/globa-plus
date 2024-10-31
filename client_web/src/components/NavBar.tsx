@@ -30,6 +30,7 @@ export const NavBar = () => {
 				{Object.entries(ROUTES_NAV[pn]).map(([k, v]) => {
 					return (
 						<NavLink
+							key={k}
 							className="active:bg-primary-dark m-2 p-2 hover:bg-[var(--PrimaryDarkHover)]"
 							style={{
 								alignItems: 'center',
