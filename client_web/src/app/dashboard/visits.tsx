@@ -34,6 +34,7 @@ export const VisitsPage = () => {
 				isDetail
 				status={visitStatuses.map((s) => ({ value: s, label: t(`s.${s}` as any) }))}
 				isVisit
+				isProvider={!isWorker}
 			/>
 		</div>
 	)

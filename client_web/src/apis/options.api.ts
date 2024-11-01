@@ -16,5 +16,7 @@ export const API_GET_OptionsV2 = async (tableName: 'categories_groups') => {
 }
 
 export const API_GET_Entity_Options = async (tableName: 'workers' | 'recipients') => {
-	return await req.get<{ value: string; label: string }[]>(`/provider/entity/${tableName}/options`)
+	const role = useStateUser.getState().user?.role
+	if (!role) toastErr(UsersE.USER_ROLE_NOT_FOUND)
+	return await req.get<{ value: string; label: string }[]>(`/${role}/entity/${tableName}/options`)
 }

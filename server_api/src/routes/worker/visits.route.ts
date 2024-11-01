@@ -1,5 +1,4 @@
-import type { FastifyReply, FastifyRequest } from 'fastify'
-
+import type { FastifyReply } from 'fastify'
 import { Type as t } from '@sinclair/typebox'
 
 import { q_pw_del_visit_log, q_w_create_visit_log } from '../../db/queries/visits_logs.query'
@@ -18,16 +17,15 @@ import { err } from '../../utils/err.util'
 import { arrToObj } from '../../utils/obj.util'
 
 const ActionListVisitsS = {
-	querystring: t.Object({ dateFrom: t.String(), dateEnd: t.String() }, { additionalProperties: false }),
+	querystring: t.Object(
+		{ dateFrom: t.String(), dateEnd: t.String() },
+		{ additionalProperties: false },
+	),
 }
 
 export const wGetVisits = {
 	handler: async (req: FastReqT<typeof ActionListVisitsS>, res: FastifyReply) => {
-		const {
-			dateFrom,
-			dateEnd
-		} = req.query
-
+		const { dateFrom, dateEnd } = req.query
 		return res.code(200).send(await q_w_get_visits_t(req.token.pid, dateFrom, dateEnd))
 	},
 }

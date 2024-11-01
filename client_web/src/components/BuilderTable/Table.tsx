@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { startOfDay } from '@fullcalendar/core/internal'
 import { Table as MTable } from '@mantine/core'
@@ -14,8 +14,6 @@ import { lo, useT } from '../../utils/i18n.util'
 import { SelectBase, SelectBaseAPIV2 } from '../BuilderForm/components/Select/Select'
 import { Button } from '../Button'
 import { DateRange } from '../DateRange'
-import { MonthPickerPopover } from '../Inputs/MonthPicker/MonthPicker'
-import { TimeframeSelect } from '../Inputs/TimeframeSelect/TimeframeSelect'
 import { ModalAddEntity } from '../Modals/ModalAddEntity'
 
 import { COL_NAMES_OBJ } from './schemas/table.schema'
@@ -27,64 +25,32 @@ export const Table = ({
 	Form,
 	items,
 	isDetail,
-	isDateFilter,
 	isTimeframeFilter,
 	isEditable,
 	status,
 	isVisit,
+	isProvider,
 }: {
 	tableName?: TableNamesT
 	modalTitle?: string
 	modalTitleEdit?: string
 	Form?: React.FC
 	items?: any[]
-	isDateFilter?: boolean
 	isDetail?: boolean
 	isTimeframeFilter?: boolean
 	isEditable?: boolean
 	status?: { value: string; label: string }[]
 	isVisit?: boolean
+	isProvider?: boolean
 }) => {
 	const [isLoading, setIsLoading] = useState(true)
 	const [cols, setCols] = useState<string[]>([])
 	const [rows, setRows] = useState<any[]>([])
-	const [dateFrom, setDateFrom] = useState<DateValue>(
-		isTimeframeFilter ? startOfDay(new Date()) : null,
-	)
-	const [_dateEnd, setDateEnd] = useState<DateValue>(
-		isTimeframeFilter ? endOfDay(new Date()) : null,
-	)
-	const [timeframe, setTimeframe] = useState<string | null>('today')
 	const [modal, setModal] = useDisclosure(false)
 	const [editPid, setEditPid] = useState<Record<string, any> | null>(null)
 	const hideCols = ['pid', 'workerPid'] as string[]
 	const nav = useNavigate()
 	const t = useT()
-
-	const handleTimeframe = useCallback((value: string | null) => {
-		switch (value) {
-			case 'today':
-				setDateFrom(startOfDay(new Date()))
-				setDateEnd(endOfDay(new Date()))
-				break
-			case 'week':
-				setDateFrom(startOfWeek(new Date()))
-				setDateEnd(endOfWeek(new Date()))
-				break
-			case 'month':
-				setDateFrom(startOfMonth(new Date()))
-				setDateEnd(endOfMonth(new Date()))
-				break
-			case 'all':
-				setDateFrom(null) // or your logic for 'all' (e.g., no filtering)
-				setDateEnd(null)
-				break
-			default:
-				// Handle any additional cases or errors
-				break
-		}
-		setTimeframe(value)
-	}, [])
 
 	useEffect(() => {
 		const main = async () => {
@@ -97,11 +63,6 @@ export const Table = ({
 		}
 		main()
 	}, [items, tableName])
-
-	const handleMonthDate = useCallback((date: DateValue) => {
-		setDateFrom(startOfMonth(date))
-		setDateEnd(endOfMonth(date))
-	}, [])
 
 	const handleFilterChange = async (
 		k: string,
@@ -131,24 +92,77 @@ export const Table = ({
 					</h1>
 				)}
 				<div style={{ display: 'flex', gap: 8 }}>
-					{isDateFilter && <MonthPickerPopover value={dateFrom} setValue={handleMonthDate} />}
-					{isTimeframeFilter && <TimeframeSelect value={timeframe} onChange={handleTimeframe} />}
+					{isTimeframeFilter && (
+						<SelectBase
+							placeholder={t('selectTimeframe')}
+							options={[
+								{ value: 'today', label: t('timeframe.today') },
+								{ value: 'week', label: t('timeframe.thisWeek') },
+								{ value: 'month', label: t('timeframe.thisMonth') },
+								{ value: 'all', label: t('showAll') },
+							]}
+							onChange={(val) => {
+								let dateFrom: DateValue | null = null
+								let dateEnd: DateValue | null = null
+								if (val === 'today') {
+									dateFrom = startOfDay(new Date())
+									dateEnd = endOfDay(new Date())
+								}
+								if (val === 'week') {
+									dateFrom = startOfWeek(new Date())
+									dateEnd = endOfWeek(new Date())
+								}
+								if (val === 'month') {
+									dateFrom = startOfMonth(new Date())
+									dateEnd = endOfMonth(new Date())
+								}
+								if (val === 'all') {
+									dateFrom = null
+									dateEnd = null
+								}
+								if (dateFrom && dateEnd) {
+									handleFilterChange(
+										'dateFrom',
+										dateFrom.toISOString().split('T')[0],
+										tableName,
+										setRows,
+										setCols,
+									)
+									handleFilterChange(
+										'dateEnd',
+										dateEnd.toISOString().split('T')[0],
+										tableName,
+										setRows,
+										setCols,
+									)
+								} else {
+									//TODO this can be handled better
+									window.location.reload()
+								}
+							}}
+						/>
+					)}
+
 					{isVisit && (
 						<div className="flex w-fit flex-row gap-2">
-							<SelectBaseAPIV2
-								entity="workers"
-								placeholder={t('t.workers')}
-								onChange={(val) =>
-									handleFilterChange('workerPid', val, tableName, setRows, setCols)
-								}
-							/>
-							<SelectBaseAPIV2
-								entity="recipients"
-								placeholder={t('t.recipients')}
-								onChange={(val) =>
-									handleFilterChange('recipientPid', val, tableName, setRows, setCols)
-								}
-							/>
+							{isProvider && (
+								<>
+									<SelectBaseAPIV2
+										entity="workers"
+										placeholder={t('t.workers')}
+										onChange={(val) =>
+											handleFilterChange('workerPid', val, tableName, setRows, setCols)
+										}
+									/>
+									<SelectBaseAPIV2
+										entity="recipients"
+										placeholder={t('t.recipients')}
+										onChange={(val) =>
+											handleFilterChange('recipientPid', val, tableName, setRows, setCols)
+										}
+									/>
+								</>
+							)}
 							<DateRange
 								placeholder={t('t.dateFromTo')}
 								onChange={(val) => {
