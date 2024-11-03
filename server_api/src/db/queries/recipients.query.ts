@@ -40,11 +40,15 @@ export const q_a_get_recipients_with_admins_t = async (tPid: string) => {
 
 export const q_p_get_recipients_options_t = async (tPid: string) => {
 	return await dbk
-		.selectFrom('recipients')
-		.where('created_by', '=', tPid)
+		.selectFrom('recipients as r')
+		.leftJoin('visits as v', 'v.recipient_pid', 'r.pid')
+		.where('v.created_by', '=', tPid)
+		.groupBy('r.pid')
+		.groupBy('r.first_name')
+		.groupBy('r.last_name')
 		.select((e) => [
-			'pid as value',
-			sql<string>`concat(${e.ref('first_name')}, ' ', ${e.ref('last_name')})`.as('label'),
+			'r.pid as value',
+			sql<string>`concat(${e.ref('r.first_name')}, ' ', ${e.ref('r.last_name')})`.as('label'),
 		])
 		.execute()
 }
