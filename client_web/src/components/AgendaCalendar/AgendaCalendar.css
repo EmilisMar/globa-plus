@@ -1,6 +1,4 @@
 .fc {
-	width: 600px;
-
 	td,
 	h2,
 	a {
@@ -48,4 +46,10 @@ button {
 .fc .fc-button .fc-icon {
 	font-size: 1.5em;
 	vertical-align: bottom;
+}
+
+.calendar-container {
+	width: 100vw;
+	height: 90vh;
+	max-width: 100%;
 }
