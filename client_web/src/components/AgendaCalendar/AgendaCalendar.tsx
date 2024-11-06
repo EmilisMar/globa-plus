@@ -43,7 +43,7 @@ export const AgendaCalendar = ({
 	}
 
 	return (
-		<div className="overflow-auto rounded-lg bg-[--white]">
+		<div className="calendar-container bg-[--white]">
 			<div className="my-2 mb-4 w-fit">
 				<SelectBaseAPI initVal={pid} entity="workers" />
 			</div>
@@ -69,7 +69,7 @@ export const AgendaCalendar = ({
 				eventStartEditable
 				events={events}
 				firstDay={1}
-				height={600}
+				height="100%"
 				nowIndicator
 				select={setOnNewVisit}
 				selectable
