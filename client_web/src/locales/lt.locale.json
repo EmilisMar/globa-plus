@@ -10,6 +10,7 @@
 	"create": "Sukurti",
 	"update": "Atnaujinti",
 	"createCategory": "Pridėti kategoriją",
+	"editCategory": "Redaguoti kategoriją",
 	"createProvider": "Pridėti paslaugos teikėją",
 	"createRecipient": "Pridėti paslaugos gavėją",
 	"editRecipient": "Redaguoti paslaugos gavėją",

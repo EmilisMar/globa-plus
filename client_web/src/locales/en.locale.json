@@ -10,6 +10,7 @@
 	"create": "Create",
 	"update": "Update",
 	"createCategory": "Create Category",
+	"editCategory": "Edit Category",
 	"createProvider": "Create Provider",
 	"createRecipient": "Create Recipient",
 	"editRecipient": "Edit Recipient",
