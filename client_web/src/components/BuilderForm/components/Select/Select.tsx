@@ -157,10 +157,6 @@ export const SelectAPIV2 = <T extends object>({
 							classNames={{ input: css.select }}
 							value={value || ''}
 							onChange={onChange}
-							onClick={async () => {
-								setIsApiLoading(true)
-								setIsApiLoading(false)
-							}}
 							disabled={isDisabled}
 							placeholder={placeholder}
 							data={data}
