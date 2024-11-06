@@ -62,6 +62,7 @@ export const lo: Record<string, string> = {
 	recipient: t('t.recipient'),
 	recipients: t('t.recipients'),
 	reports: t('t.reports'),
+	selectCorrectAddress: t('t.selectCorrectAddress'),
 	serviceName: t('t.serviceName'),
 	services: t('t.services'),
 	servicesCompleted: t('t.servicesCompleted'),

@@ -21,10 +21,13 @@ export type RecipientT = {
 	firstName: string
 	lastName: string
 	address: {
+		fullAddress: string
 		adddressLine: string
 		town: string
 		postCode: string
 		country: string
+		latitude: number
+		longitude: number
 	} | null
 	phone: string
 	notes: string | null

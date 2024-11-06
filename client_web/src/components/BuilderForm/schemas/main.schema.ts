@@ -1,6 +1,7 @@
 import { z } from '@mariuzm/form'
 
 import { RecipientApprovByE } from '../../../apis/types/entities.api.type'
+import { t } from '../../../utils/i18n.util'
 
 export const AddProviderS = z.object({
 	companyName: z.string().min(1).max(256),
@@ -15,12 +16,23 @@ export const AddRecipientS = z
 		providerPid: z.string().min(1).max(50),
 		firstName: z.string().min(1).max(50),
 		lastName: z.string().min(1).max(50),
-		address: z.object({
-			adddress_line: z.string().min(1).max(100),
-			town: z.string().min(1).max(50),
-			postCode: z.string().min(1).max(50),
-			country: z.string().min(1).max(50),
-		}),
+		address: z
+			.object({
+				full_address: z.string().max(256),
+				adddress_line: z.string().min(1).max(100).optional(),
+				town: z.string().min(1).max(50).optional(),
+				postCode: z.string().min(1).max(50).optional(),
+				country: z.string().min(1).max(50).optional(),
+				latitude: z.number().nullable().optional(),
+				longitude: z.number().nullable().optional(),
+			})
+			.refine(
+				(data) => !!data.full_address && !!data.adddress_line && !!data.town && !!data.postCode && !!data.country,
+				{
+					message: t('t.selectCorrectAddress'),
+					path: ['full_address'],
+				}
+			),
 		phone: z.string().min(1).max(50),
 		notes: z.string().optional(),
 		hourlyRate: z.number(),
