@@ -134,6 +134,18 @@ export const SelectAPIV2 = <T extends object>({
 }) => {
 	const [isApiLoading, setIsApiLoading] = useState(false)
 	const [data, setData] = useState<SelectOptionT[]>([])
+
+	useEffect(() => {
+		const loadData = async () => {
+			setIsApiLoading(true)
+			const options = await API_GET_OptionsV2('categories_groups')
+			setData(options)
+			setIsApiLoading(false)
+		}
+
+		loadData()
+	}, [])
+
 	return (
 		<Controller
 			name={id}
@@ -147,7 +159,6 @@ export const SelectAPIV2 = <T extends object>({
 							onChange={onChange}
 							onClick={async () => {
 								setIsApiLoading(true)
-								setData(await API_GET_OptionsV2('categories_groups'))
 								setIsApiLoading(false)
 							}}
 							disabled={isDisabled}

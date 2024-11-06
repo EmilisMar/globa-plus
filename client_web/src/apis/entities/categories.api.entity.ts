@@ -9,3 +9,10 @@ export const API_POST_Category = async (data: AddCategoryT) => {
 	if (!role) return toastErr(UsersE.USER_ROLE_NOT_FOUND)
 	return await req.post(`/${role}/entity/categories`, data)
 }
+
+export const API_PATCH_Category = async (data: AddCategoryT, catPid: string) => {
+	const role = useStateUser.getState().user?.role
+	if (!role) return toastErr(UsersE.USER_ROLE_NOT_FOUND)
+		console.log('priejom?')
+	return await req.patch(`/${role}/entity/categories/${catPid}`, data)
+}
