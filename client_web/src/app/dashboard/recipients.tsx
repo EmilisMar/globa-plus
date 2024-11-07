@@ -87,7 +87,7 @@ const Form = ({ item }: { item?: RecipientT }) => {
 	}
 
 	// Reset autocomplete field if manually changed by user
-	const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleAddressChange = () => {
 		setIsPlaceSelected(false)
 		f.clearErrors('address.full_address')
 	}
