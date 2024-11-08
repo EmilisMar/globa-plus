@@ -5,7 +5,7 @@ import cors from '@fastify/cors'
 import { TypeBoxValidatorCompiler, type TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 
 import { getTable } from './routes/admin/_main.route'
-import { apCreateCategory } from './routes/admin/categories.route'
+import { apCreateCategory, apGetCategory, apUpdateCategory } from './routes/admin/categories.route'
 import { createProvider } from './routes/admin/providers.route'
 import { createRecipient, getReports } from './routes/admin/recipients.route'
 import { createService } from './routes/admin/services.route'
@@ -80,6 +80,8 @@ Fastify()
 				.get('/:tableName', getTable)
 				.get('/options/:entity', apGetOptions)
 				.post('/categories', apCreateCategory)
+				.get('/categories/:categoryPid', apGetCategory)
+				.patch('/categories/:categoryPid', apUpdateCategory)
 				.post('/providers', createProvider)
 				.post('/recipients', createRecipient)
 				.post('/services', createService)
@@ -98,6 +100,8 @@ Fastify()
 				.get('/options/:entity', apGetOptions)
 				.get('/categories', pGetCategories)
 				.post('/categories', apCreateCategory)
+				.get('/categories/:categoryPid', apGetCategory)
+				.patch('/categories/:categoryPid', apUpdateCategory)
 				.get('/recipients', pGetRecipients)
 				.get('/recipients/options', pGetRecipientsOptions)
 				.get('/recipients/:recipientPid', pGetRecipient)

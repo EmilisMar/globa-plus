@@ -21,8 +21,8 @@ export const RecipientsTable = pgTable('recipients', {
 	lastName: varchar('last_name', { length: 256 }).notNull(),
 	hourlyRate: doublePrecision('hourly_rate').notNull(),
 	address: json('address')
-		.$type<{ adddress_line: string; town: string; postCode: string; country: string }>()
-		.$default(() => ({ adddress_line: '', town: '', postCode: '', country: '' })),
+		.$type<{ full_address: string; adddress_line: string; town: string; postCode: string; country: string; latitude: number | null; longitude: number | null }>()
+		.$default(() => ({ full_address: '', adddress_line: '', town: '', postCode: '', country: '', latitude: null, longitude: null})),
 	phone: varchar('phone', { length: 256 }).notNull(),
 	approveBy: varchar('approve_by', { length: 10, enum: ApproveByE }),
 	email: varchar('email', { length: 256 }),

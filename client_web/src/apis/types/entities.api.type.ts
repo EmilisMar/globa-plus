@@ -16,15 +16,24 @@ export type GetWorkerVisitT = {
 	recipientName: string
 }
 
+export type CategorieT = {
+    pid: string
+    categoryGroupPid: string
+    name: string
+}
+
 export type RecipientT = {
 	pid: string
 	firstName: string
 	lastName: string
 	address: {
+		fullAddress: string
 		adddressLine: string
 		town: string
 		postCode: string
 		country: string
+		latitude: number
+		longitude: number
 	} | null
 	phone: string
 	notes: string | null
