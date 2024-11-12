@@ -141,8 +141,13 @@ export const q_get_recipients_opt = async (tPid: string) => {
 		.execute()
 }
 
-export const q_a_get_recipients_report_t = async ({ dateFrom }: { dateFrom?: string }) => {
-	const dateTo = getEndOfMonth(dateFrom)
+export const q_a_get_recipients_report_t = async ({
+	dateFrom,
+	dateEnd: dateTo
+}: {
+	dateFrom?: string,
+	dateEnd?: string
+}) => {
 	const a: Expression<SqlBool>[] = []
 	const q = await dbk
 		.selectFrom('recipients as r')

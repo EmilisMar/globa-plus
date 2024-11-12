@@ -70,11 +70,23 @@ export const Table = ({
 		tableName: TableNamesT | undefined,
 		setRows: (rows: any[]) => void,
 		setCols: (cols: string[]) => void,
+		dateValues?: { dateFrom: string, dateEnd: string }
 	) => {
-		if (tableName && v) {
+		if (tableName) {
 			const params = new URLSearchParams(window.location.search)
-			params.set(k, v)
+
+			if (dateValues) {
+				// Set both dateFrom and dateEnd if dateValues are provided, called once
+				params.set('dateFrom', dateValues.dateFrom)
+				params.set('dateEnd', dateValues.dateEnd)
+			} else if (v) {
+				params.set(k, v)
+			}
+
+			// Update the URL with the new parameters
 			window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+
+			// Fetch new data based on the updated filters
 			const newData = await API_GET_Table(tableName)
 			if (newData) {
 				setRows(newData)
@@ -82,6 +94,23 @@ export const Table = ({
 			}
 		}
 	}
+
+	const handleDateFilter = (val: [Date | null, Date | null]) => {
+		if (val[0] && val[1]) {
+			// Set dateFrom to the start of the day (00:00:00)
+			const dateFrom = new Date(val[0]);
+			dateFrom.setHours(0, 0, 0, 0);
+			const formattedDateFrom = `${dateFrom.getFullYear()}-${String(dateFrom.getMonth() + 1).padStart(2, '0')}-${String(dateFrom.getDate()).padStart(2, '0')}`;
+
+			// Set dateEnd to the end of the day (23:59:59)
+			const dateEnd = new Date(val[1]);
+			dateEnd.setHours(23, 59, 59, 999);
+			const formattedDateEnd = `${dateEnd.getFullYear()}-${String(dateEnd.getMonth() + 1).padStart(2, '0')}-${String(dateEnd.getDate()).padStart(2, '0')}`;
+
+			handleFilterChange('', null, tableName, setRows, setCols, { dateFrom: formattedDateFrom, dateEnd: formattedDateEnd })
+		}
+	}
+
 
 	return (
 		<div>
@@ -121,20 +150,7 @@ export const Table = ({
 									dateEnd = null
 								}
 								if (dateFrom && dateEnd) {
-									handleFilterChange(
-										'dateFrom',
-										dateFrom.toISOString().split('T')[0],
-										tableName,
-										setRows,
-										setCols,
-									)
-									handleFilterChange(
-										'dateEnd',
-										dateEnd.toISOString().split('T')[0],
-										tableName,
-										setRows,
-										setCols,
-									)
+									handleDateFilter([dateFrom, dateEnd])
 								} else {
 									//TODO this can be handled better
 									window.location.reload()
@@ -143,9 +159,9 @@ export const Table = ({
 						/>
 					)}
 
-					{isVisit && (
+					{(isVisit || tableName === 'reports') && (
 						<div className="flex w-fit flex-row gap-2">
-							{isProvider && (
+							{isVisit && isProvider && (
 								<>
 									<SelectBaseAPIV2
 										entity="workers"
@@ -166,29 +182,16 @@ export const Table = ({
 							<DateRange
 								placeholder={t('t.dateFromTo')}
 								onChange={(val) => {
-									if (val[0] && val[1]) {
-										handleFilterChange(
-											'dateFrom',
-											val[0].toISOString().split('T')[0],
-											tableName,
-											setRows,
-											setCols,
-										)
-										handleFilterChange(
-											'dateEnd',
-											val[1].toISOString().split('T')[0],
-											tableName,
-											setRows,
-											setCols,
-										)
-									}
+									handleDateFilter(val)
 								}}
 							/>
-							<SelectBase
-								placeholder={t('t.status')}
-								options={status?.map((s) => ({ value: s.value, label: s.label })) || []}
-								onChange={(val) => handleFilterChange('status', val, tableName, setRows, setCols)}
-							/>
+							{isVisit &&
+								<SelectBase
+									placeholder={t('t.status')}
+									options={status?.map((s) => ({ value: s.value, label: s.label })) || []}
+									onChange={(val) => handleFilterChange('status', val, tableName, setRows, setCols)}
+								/>
+							}
 						</div>
 					)}
 					{modalTitle && Form && (

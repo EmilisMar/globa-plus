@@ -7,7 +7,7 @@ import { TypeBoxValidatorCompiler, type TypeBoxTypeProvider } from '@fastify/typ
 import { getTable } from './routes/admin/_main.route'
 import { apCreateCategory, apGetCategory, apUpdateCategory } from './routes/admin/categories.route'
 import { createProvider } from './routes/admin/providers.route'
-import { createRecipient } from './routes/admin/recipients.route'
+import { createRecipient, getReports } from './routes/admin/recipients.route'
 import { createService } from './routes/admin/services.route'
 import { apGetOptions, getOptions } from './routes/options.route'
 import { pGetCategories } from './routes/provider/categories.route'
@@ -85,6 +85,7 @@ Fastify()
 				.post('/providers', createProvider)
 				.post('/recipients', createRecipient)
 				.post('/services', createService)
+				.get('/reports', getReports)
 		},
 		{ prefix: '/admin/entity' },
 	)

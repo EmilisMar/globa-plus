@@ -13,7 +13,7 @@ import { ApproveByE } from '../../db/tables/recipients.table'
 import type { FastReqT } from '../../types/fastify.type'
 import { err } from '../../utils/err.util'
 import { arrToObj } from '../../utils/obj.util'
-import { CreateRecipientS } from '../admin/recipients.route'
+import { CreateRecipientS, GetReportsS } from '../admin/recipients.route'
 
 const GetRecipientS = {
 	params: t.Object({ recipientPid: t.String() }, { additionalProperties: false }),
@@ -89,13 +89,6 @@ export const pEditRecipient = {
 		await q_p_edit_recipient(req.body, req.params.recipientPid)
 		res.code(200).send('ok')
 	},
-}
-
-const GetReportsS = {
-	querystring: t.Object(
-		{ dateFrom: t.Optional(t.String()), dateEnd: t.Optional(t.String()) },
-		{ additionalProperties: false },
-	),
 }
 
 export const pGetReports = {
