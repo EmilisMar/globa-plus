@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-
+import path from 'path'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
@@ -10,6 +10,9 @@ export default defineConfig({
 	resolve: {
 		// Ensures that the plugin dependencies are correctly resolved
 		extensions: ['.js', '.jsx', '.ts', '.tsx'],
+		alias: {
+			'@': path.resolve(__dirname, './src'),
+		},
 	},
 	server: {
 		watch: {
