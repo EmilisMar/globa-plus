@@ -8,7 +8,7 @@ import { AgendaCalendar } from '../../components/AgendaCalendar/AgendaCalendar'
 import { ModalContainer } from '../../components/Modals/_ModalContainer'
 import { useT } from '../../utils/i18n.util'
 
-import { FormVisit } from './visits'
+import { FormVisit } from './visits/visits'
 
 export const ProviderWorkerPage = () => {
 	const wVisits = useLoaderData() as GetWorkerVisitT[]
