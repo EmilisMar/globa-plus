@@ -47,7 +47,6 @@ export const API_POST_VisitAction = async ({
 	)
 	if ('message' in r) {
 		if (r.message === WarnE.VISIT_IN_PROGRESS && r.data) {
-			openVisitModal && openVisitModal()
 			setVPid && setVPid(r.data)
 		}
 		return

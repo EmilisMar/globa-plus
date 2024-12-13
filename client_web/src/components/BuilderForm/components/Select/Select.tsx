@@ -55,20 +55,26 @@ export const Select = <T extends object>({
 	)
 }
 
+interface SelectBaseProps {
+	placeholder?: string;
+	options: SelectOptionT[];
+	onChange?: (value: string | null) => void;
+	value?: string;
+}
+
 export const SelectBase = ({
 	placeholder,
 	options,
 	onChange,
-}: {
-	placeholder?: string
-	options: SelectOptionT[]
-	onChange?: (value: string | null) => void
-}) => {
+	value,
+}: SelectBaseProps) => {
 	return (
 		<MSelect
 			onChange={onChange}
 			placeholder={placeholder}
 			data={options}
+			value={value}
+			clearable
 			styles={{
 				input: { color: Color.Text, backgroundColor: Color.Bg },
 				options: { color: Color.Text },

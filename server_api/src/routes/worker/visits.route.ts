@@ -86,10 +86,10 @@ export const wActionVisit = {
 		const action = req.query.action
 		const body = req.body
 		const sPid = req.query.servicePid
-		const visit = await q_pw_check_if_worker_has_other_visit_in_progress(vPid, tPid)
-		if (visit) {
-			return res.code(200).send({ data: visit, message: WarnE.VISIT_IN_PROGRESS })
-		}
+		// const visit = await q_pw_check_if_worker_has_other_visit_in_progress(vPid, tPid)
+		// if (visit) {
+		// 	return res.code(200).send({ data: visit, message: WarnE.VISIT_IN_PROGRESS })
+		// }
 		if ((action as 'SERVICE_UNCHECK') === 'SERVICE_UNCHECK' && sPid) {
 			await q_pw_del_visit_log(vPid, tPid, sPid)
 			return res.code(200).send(await q_w_get_visit(tPid, vPid))

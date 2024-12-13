@@ -79,6 +79,7 @@ export type WorkerVisitT = {
 		| 'SERVICE_UNCHECK'
 		| 'CANCELLED'
 		| 'ENDED'
+		| 'APPROVED'
 	recipient: {
 		pid: string
 		fullName: string
@@ -86,7 +87,16 @@ export type WorkerVisitT = {
 		phone: string
 		approveBy: `${RecipientApprovByE}`
 		createdBy: string
+		categories?: Array<{
+			name: string
+			services: Array<{
+				pid: string
+				name: string
+			}>
+		}>
+		notes?: string
 	}
+	categories: Array<CategorieT>,
 	visitLogs: {
 		pid: string
 		visitPid: string
